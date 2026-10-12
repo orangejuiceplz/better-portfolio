@@ -15,13 +15,36 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <svg hidden aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-horse" viewBox="0 0 256 256"><path d="M136,100a12,12,0,1,1-12-12A12,12,0,0,1,136,100Zm96,29.48A104.29,104.29,0,0,1,130.1,232l-2.17,0a103.32,103.32,0,0,1-69.26-26A8,8,0,1,1,69.34,194a84.71,84.71,0,0,0,20.1,13.37L116,170.84c-22.78-9.83-47.47-5.65-61.4-3.29A31.84,31.84,0,0,1,23.3,154.72l-.3-.43-13.78-22a8,8,0,0,1,2.59-11.05L112,59.53V32a8,8,0,0,1,8-8h8A104,104,0,0,1,232,129.48Zm-16-.22A88,88,0,0,0,128,40V64a8,8,0,0,1-3.81,6.81L27.06,130.59l9.36,15A15.92,15.92,0,0,0,52,151.77c16-2.7,48.77-8.24,78.07,8.18A40.06,40.06,0,0,0,168,120a8,8,0,0,1,16,0,56.07,56.07,0,0,1-51.8,55.83l-27.11,37.28A90.89,90.89,0,0,0,129.78,216,88.29,88.29,0,0,0,216,129.26Z"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 256 256"><path d="M248,80a28,28,0,1,0-51.12,15.77l-26.79,33L146,73.4a28,28,0,1,0-36.06,0L85.91,128.74l-26.79-33a28,28,0,1,0-26.6,12L47,194.63A16,16,0,0,0,62.78,208H193.22A16,16,0,0,0,209,194.63l14.47-86.85A28,28,0,0,0,248,80ZM128,40a12,12,0,1,1-12,12A12,12,0,0,1,128,40ZM24,80A12,12,0,1,1,36,92,12,12,0,0,1,24,80ZM193.22,192H62.78L48.86,108.52,81.79,149A8,8,0,0,0,88,152a7.83,7.83,0,0,0,1.08-.07,8,8,0,0,0,6.26-4.74l29.3-67.4a27,27,0,0,0,6.72,0l29.3,67.4a8,8,0,0,0,6.26,4.74A7.83,7.83,0,0,0,168,152a8,8,0,0,0,6.21-3l32.93-40.52ZM220,92a12,12,0,1,1,12-12A12,12,0,0,1,220,92Z"/></symbol>
+    <symbol id="i-robot" viewBox="0 0 256 256"><path d="M200,48H136V16a8,8,0,0,0-16,0V48H56A32,32,0,0,0,24,80V192a32,32,0,0,0,32,32H200a32,32,0,0,0,32-32V80A32,32,0,0,0,200,48Zm16,144a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V80A16,16,0,0,1,56,64H200a16,16,0,0,1,16,16Zm-52-56H92a28,28,0,0,0,0,56h72a28,28,0,0,0,0-56Zm-24,16v24H116V152ZM80,164a12,12,0,0,1,12-12h8v24H92A12,12,0,0,1,80,164Zm84,12h-8V152h8a12,12,0,0,1,0,24ZM72,108a12,12,0,1,1,12,12A12,12,0,0,1,72,108Zm88,0a12,12,0,1,1,12,12A12,12,0,0,1,160,108Z"/></symbol>
+    <symbol id="i-handshake" viewBox="0 0 256 256"><path d="M254.3,107.91,228.78,56.85a16,16,0,0,0-21.47-7.15L182.44,62.13,130.05,48.27a8.14,8.14,0,0,0-4.1,0L73.56,62.13,48.69,49.7a16,16,0,0,0-21.47,7.15L1.7,107.9a16,16,0,0,0,7.15,21.47l27,13.51,55.49,39.63a8.06,8.06,0,0,0,2.71,1.25l64,16a8,8,0,0,0,7.6-2.1l55.07-55.08,26.42-13.21a16,16,0,0,0,7.15-21.46Zm-54.89,33.37L165,113.72a8,8,0,0,0-10.68.61C136.51,132.27,116.66,130,104,122L147.24,80h31.81l27.21,54.41ZM41.53,64,62,74.22,36.43,125.27,16,115.06Zm116,119.13L99.42,168.61l-49.2-35.14,28-56L128,64.28l9.8,2.59-45,43.68-.08.09a16,16,0,0,0,2.72,24.81c20.56,13.13,45.37,11,64.91-5L188,152.66Zm62-57.87-25.52-51L214.47,64,240,115.06Zm-87.75,92.67a8,8,0,0,1-7.75,6.06,8.13,8.13,0,0,1-1.95-.24L80.41,213.33a7.89,7.89,0,0,1-2.71-1.25L51.35,193.26a8,8,0,0,1,9.3-13l25.11,17.94L126,208.24A8,8,0,0,1,131.82,217.94Z"/></symbol>
+    <symbol id="i-flag-banner" viewBox="0 0 256 256"><path d="M238.76,51.73A8,8,0,0,0,232,48H40a8,8,0,0,0-5.66,13.66L76.69,104,34.34,146.34A8,8,0,0,0,40,160H173.62l-28.84,60.56a8,8,0,1,0,14.44,6.88l80-168A8,8,0,0,0,238.76,51.73ZM181.23,144H59.31l34.35-34.34a8,8,0,0,0,0-11.32L59.31,64h160Z"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 256 256"><path d="M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8Zm144-8.9c0,35.52-29,64.64-64,64.9a64,64,0,0,1-64-64V56H192ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z"/></symbol>
+    <symbol id="i-hand-heart" viewBox="0 0 256 256"><path d="M230.33,141.06a24.34,24.34,0,0,0-18.61-4.77C230.5,117.33,240,98.48,240,80c0-26.47-21.29-48-47.46-48A47.58,47.58,0,0,0,156,48.75,47.58,47.58,0,0,0,119.46,32C93.29,32,72,53.53,72,80c0,11,3.24,21.69,10.06,33a31.87,31.87,0,0,0-14.75,8.4L44.69,144H16A16,16,0,0,0,0,160v40a16,16,0,0,0,16,16H120a7.93,7.93,0,0,0,1.94-.24l64-16a6.94,6.94,0,0,0,1.19-.4L226,182.82l.44-.2a24.6,24.6,0,0,0,3.93-41.56ZM119.46,48A31.15,31.15,0,0,1,148.6,67a8,8,0,0,0,14.8,0,31.15,31.15,0,0,1,29.14-19C209.59,48,224,62.65,224,80c0,19.51-15.79,41.58-45.66,63.9l-11.09,2.55A28,28,0,0,0,140,112H100.68C92.05,100.36,88,90.12,88,80,88,62.65,102.41,48,119.46,48ZM16,160H40v40H16Zm203.43,8.21-38,16.18L119,200H56V155.31l22.63-22.62A15.86,15.86,0,0,1,89.94,128H140a12,12,0,0,1,0,24H112a8,8,0,0,0,0,16h32a8.32,8.32,0,0,0,1.79-.2l67-15.41.31-.08a8.6,8.6,0,0,1,6.3,15.9Z"/></symbol>
+    <symbol id="i-graduation-cap" viewBox="0 0 256 256"><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z"/></symbol>
+    <symbol id="i-code" viewBox="0 0 256 256"><path d="M69.12,94.15,28.5,128l40.62,33.85a8,8,0,1,1-10.24,12.29l-48-40a8,8,0,0,1,0-12.29l48-40a8,8,0,0,1,10.24,12.3Zm176,27.7-48-40a8,8,0,1,0-10.24,12.3L227.5,128l-40.62,33.85a8,8,0,1,0,10.24,12.29l48-40a8,8,0,0,0,0-12.29ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z"/></symbol>
+    <symbol id="i-translate" viewBox="0 0 256 256"><path d="M247.15,212.42l-56-112a8,8,0,0,0-14.31,0l-21.71,43.43A88,88,0,0,1,108,126.93,103.65,103.65,0,0,0,135.69,64H160a8,8,0,0,0,0-16H104V32a8,8,0,0,0-16,0V48H32a8,8,0,0,0,0,16h87.63A87.76,87.76,0,0,1,96,116.35a87.74,87.74,0,0,1-19-31,8,8,0,1,0-15.08,5.34A103.63,103.63,0,0,0,84,127a87.55,87.55,0,0,1-52,17,8,8,0,0,0,0,16,103.46,103.46,0,0,0,64-22.08,104.18,104.18,0,0,0,51.44,21.31l-26.6,53.19a8,8,0,0,0,14.31,7.16L148.94,192h70.11l13.79,27.58A8,8,0,0,0,240,224a8,8,0,0,0,7.15-11.58ZM156.94,176,184,121.89,211.05,176Z"/></symbol>
+    <symbol id="i-certificate" viewBox="0 0 256 256"><path d="M128,136a8,8,0,0,1-8,8H72a8,8,0,0,1,0-16h48A8,8,0,0,1,128,136Zm-8-40H72a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Zm112,65.47V224A8,8,0,0,1,220,231l-24-13.74L172,231A8,8,0,0,1,160,224V200H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216a16,16,0,0,1,16,16V86.53a51.88,51.88,0,0,1,0,74.94ZM160,184V161.47A52,52,0,0,1,216,76V56H40V184Zm56-12a51.88,51.88,0,0,1-40,0v38.22l16-9.16a8,8,0,0,1,7.94,0l16,9.16Zm16-48a36,36,0,1,0-36,36A36,36,0,0,0,232,124Z"/></symbol>
+    <symbol id="i-envelope-simple" viewBox="0 0 256 256"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></symbol>
+    <symbol id="i-lightbulb" viewBox="0 0 256 256"><path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 256 256"><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"/></symbol>
+    <symbol id="i-arrow-counter-clockwise" viewBox="0 0 256 256"><path d="M224,128a96,96,0,0,1-94.71,96H128A95.38,95.38,0,0,1,62.1,197.8a8,8,0,0,1,11-11.63A80,80,0,1,0,71.43,71.39a3.07,3.07,0,0,1-.26.25L44.59,96H72a8,8,0,0,1,0,16H24a8,8,0,0,1-8-8V56a8,8,0,0,1,16,0V85.8L60.25,60A96,96,0,0,1,224,128Z"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 256 256"><path d="M237.66,178.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L212.69,192H200.94a72.12,72.12,0,0,1-58.59-30.15l-41.72-58.4A56.1,56.1,0,0,0,55.06,80H32a8,8,0,0,1,0-16H55.06a72.12,72.12,0,0,1,58.59,30.15l41.72,58.4A56.1,56.1,0,0,0,200.94,176h11.75l-10.35-10.34a8,8,0,0,1,11.32-11.32ZM143,107a8,8,0,0,0,11.16-1.86l1.2-1.67A56.1,56.1,0,0,1,200.94,80h11.75L202.34,90.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L212.69,64H200.94a72.12,72.12,0,0,0-58.59,30.15l-1.2,1.67A8,8,0,0,0,143,107Zm-30,42a8,8,0,0,0-11.16,1.86l-1.2,1.67A56.1,56.1,0,0,1,55.06,176H32a8,8,0,0,0,0,16H55.06a72.12,72.12,0,0,0,58.59-30.15l1.2-1.67A8,8,0,0,0,113,149Z"/></symbol>
+    <symbol id="i-speaker-high" viewBox="0 0 256 256"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.08a40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.58,24,24,0,0,0,0-31.72,8,8,0,0,1,12-10.58ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></symbol>
+    <symbol id="i-speaker-slash" viewBox="0 0 256 256"><path d="M53.92,34.62A8,8,0,1,0,42.08,45.38L73.55,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V175.09l42.08,46.29a8,8,0,1,0,11.84-10.76ZM32,96H72v64H32ZM144,207.64,88,164.09V95.89l56,61.6Zm42-63.77a24,24,0,0,0,0-31.72,8,8,0,1,1,12-10.57,40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.59Zm-80.16-76a8,8,0,0,1,1.4-11.23l39.85-31A8,8,0,0,1,160,32v74.83a8,8,0,0,1-16,0V48.36l-26.94,21A8,8,0,0,1,105.84,67.91ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></symbol>
+    <symbol id="i-lock-open" viewBox="0 0 256 256"><path d="M208,80H96V56a32,32,0,0,1,32-32c15.37,0,29.2,11,32.16,25.59a8,8,0,0,0,15.68-3.18C171.32,24.15,151.2,8,128,8A48.05,48.05,0,0,0,80,56V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80Zm0,128H48V96H208V208Zm-68-56a12,12,0,1,1-12-12A12,12,0,0,1,140,152Z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></symbol>
+  </svg>
   <a class="skip" href="#site">Skip to content</a>
 
   <header class="top">
-    <a class="mark" href="#game"><span aria-hidden="true">&#9822;</span> Shiven Kishore</a>
+    <a class="mark" href="#game"><svg class="icon" aria-hidden="true"><use href="#i-horse"/></svg> Shiven Kishore</a>
     <div class="tools">
-      <button id="sound" type="button" aria-pressed="true">Sound on</button>
-      <a id="reveal" href="#site">Reveal all</a>
+      <button id="sound" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true"><use id="sound-icon" href="#i-speaker-high"/></svg> <span>Sound</span></button>
+      <a id="reveal" href="#site"><svg class="icon" aria-hidden="true"><use href="#i-lock-open"/></svg> <span>Reveal all</span></a>
+      <a href="credits/"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg> <span>Credits</span></a>
     </div>
   </header>
 
@@ -39,7 +62,8 @@
           <p class="eyebrow">1. The opening</p>
           <h2 id="opening-title">Education</h2>
         </header>
-        <article class="card">
+        <article class="card piece-card">
+          <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-graduation-cap"/></svg></span>
           <h3>Freehold High School</h3>
           <p class="meta">Freehold, NJ &middot; Class of 2027</p>
           <p class="stat"><span class="num">4.8</span> weighted GPA</p>
@@ -61,25 +85,25 @@
         </header>
         <div class="grid">
           <article class="card piece-card" data-step="3">
-            <span class="glyph" aria-hidden="true">&#9818;</span>
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-crown"/></svg></span>
             <h3>Founder and President, NibbleCode Inc.</h3>
             <p class="meta">Nonprofit &middot; Grade 12 &middot; 8 hrs/wk</p>
             <p>NibbleCode teaches younger kids the nuances of computing. Students choose a physical hardware path or a software creation path and learn how computers work from the ground up.</p>
           </article>
           <article class="card piece-card" data-step="4">
-            <span class="glyph" aria-hidden="true">&#9822;</span>
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-robot"/></svg></span>
             <h3>Programming Lead, FIRST Tech Challenge Robotics</h3>
             <p class="meta">Grades 11 to 12 &middot; 5 hrs/wk</p>
             <p>Leads the programming of the team's competition robot, from autonomous routines to driver controls. Mentors new programmers in Java so the team is ready for future seasons.</p>
           </article>
           <article class="card piece-card" data-step="5">
-            <span class="glyph" aria-hidden="true">&#9820;</span>
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-handshake"/></svg></span>
             <h3>Sponsorship Outreach Officer, Technology Student Association</h3>
             <p class="meta">Officer, Grades 11 to 12 &middot; Member, Grade 10 &middot; 4 hrs/wk</p>
             <p>Builds relationships with local businesses and secured more than $2,000 in sponsorships for the chapter.</p>
           </article>
           <article class="card piece-card" data-step="5">
-            <span class="glyph" aria-hidden="true">&#9821;</span>
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-flag-banner"/></svg></span>
             <h3>Challenge Writer, Cybersecurity Club (BoroCTF)</h3>
             <p class="meta">Writer, Grade 12 &middot; Member, Grade 11 &middot; 3 hrs/wk</p>
             <p>Writes challenges for BoroCTF, a capture-the-flag competition. Competed with the club and placed 15th out of more than 1,000 teams.</p>
@@ -119,7 +143,8 @@
           <h2 id="endgame-title">Awards and service</h2>
         </header>
         <div class="grid">
-          <article class="card">
+          <article class="card piece-card">
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-trophy"/></svg></span>
             <h3>Awards and honors</h3>
             <ul class="list">
               <li>
@@ -132,7 +157,8 @@
               </li>
             </ul>
           </article>
-          <article class="card">
+          <article class="card piece-card">
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-hand-heart"/></svg></span>
             <h3>Community service</h3>
             <ul class="list">
               <li>
@@ -154,7 +180,8 @@
           <h2 id="repertoire-title">Skills and certifications</h2>
         </header>
         <div class="grid three">
-          <article class="card">
+          <article class="card piece-card">
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-code"/></svg></span>
             <h3>Programming</h3>
             <ul class="chips">
               <li>Java</li>
@@ -162,14 +189,16 @@
               <li>Assembly</li>
             </ul>
           </article>
-          <article class="card">
+          <article class="card piece-card">
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-translate"/></svg></span>
             <h3>Languages</h3>
             <ul class="chips">
               <li>English</li>
               <li>Spanish</li>
             </ul>
           </article>
-          <article class="card">
+          <article class="card piece-card">
+            <span class="glyph" aria-hidden="true"><svg class="icon"><use href="#i-certificate"/></svg></span>
             <h3>Certifications</h3>
             <ul class="chips">
               <li>GitHub Foundations <b>2026</b></li>
@@ -184,33 +213,24 @@
           <h2 id="contact-title">Contact</h2>
         </header>
         <ul class="contact">
-          <li><a href="mailto:shivenkishore@icloud.com">shivenkishore@icloud.com</a></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-envelope-simple"/></svg> <a href="mailto:shivenkishore@icloud.com">shivenkishore@icloud.com</a></li>
           <li><a href="tel:+17329241752">(732) 924-1752</a></li>
           <li><a href="https://github.com/orangejuiceplz" rel="me noopener">github.com/orangejuiceplz</a></li>
           <li>Howell, NJ</li>
         </ul>
       </section>
-      <footer class="foot">
-        <p>Board by <a href="https://github.com/lichess-org/chessground" rel="noopener">chessground</a>. Rules by <a href="https://github.com/jhlywa/chess.js" rel="noopener">chess.js</a>. Sounds by chess.com.</p>
-      </footer>
     </div>
 
     <aside id="game" class="stage" aria-label="Chess puzzle">
       <div class="game">
-        <div class="boardrow">
-          <div class="eval" role="img" aria-labelledby="eval-label">
-            <div class="eval-white"></div>
-            <span id="eval-label">0.0</span>
-          </div>
-          <div id="board" class="board" aria-label="Chessboard"></div>
-        </div>
+        <div id="board" class="board" aria-label="Chessboard"></div>
         <div class="side">
           <p id="status" class="status" role="status" aria-live="polite">White to move</p>
           <div class="controls">
-            <button id="hint" type="button">Hint</button>
-            <button id="show" type="button">Show the move</button>
-            <button id="back" type="button" class="warn" hidden>Take back</button>
-            <button id="again" type="button">New game</button>
+            <button id="hint" type="button"><svg class="icon" aria-hidden="true"><use href="#i-lightbulb"/></svg> Hint</button>
+            <button id="show" type="button"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg> Show the move</button>
+            <button id="back" type="button" class="warn" hidden><svg class="icon" aria-hidden="true"><use href="#i-arrow-counter-clockwise"/></svg> Take back</button>
+            <button id="again" type="button"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg> New game</button>
           </div>
           <ol id="moves" class="moves" aria-label="Moves played"></ol>
           <p id="credit" class="credit"></p>
@@ -219,6 +239,11 @@
     </aside>
   </main>
 
+  <div id="eval" class="eval" role="img" aria-labelledby="eval-label">
+    <div class="eval-white"></div>
+    <div class="eval-thumb" aria-hidden="true"></div>
+    <span id="eval-label">0.0</span>
+  </div>
 
   <script type="module" src="app.js"></script>
 </body>

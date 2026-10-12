@@ -96,12 +96,12 @@ const ui = {
   again: document.getElementById("again"),
   moves: document.getElementById("moves"),
   credit: document.getElementById("credit"),
-  evalBar: document.querySelector(".eval"),
+  evalBar: document.getElementById("eval"),
+  evalThumb: document.querySelector(".eval-thumb"),
   evalLabel: document.getElementById("eval-label"),
   sound: document.getElementById("sound"),
+  soundIcon: document.getElementById("sound-icon"),
   reveal: document.getElementById("reveal"),
-  layout: document.querySelector(".layout"),
-  game: document.querySelector(".game"),
   content: document.getElementById("site"),
   steps: [...document.querySelectorAll("[data-step]")],
 };
@@ -213,19 +213,22 @@ function setEval(level) {
 }
 
 function build(level) {
-  const first = built === 0 && level > 0;
-  built = Math.max(built, level);
+  if (level <= built) {
+    return;
+  }
+  const first = built === 0;
+  const target = ui.steps.find((element) => Number(element.dataset.step) > built);
+  built = level;
   for (const element of ui.steps) {
     element.classList.toggle("built", Number(element.dataset.step) <= built);
   }
   if (first) {
     play("notify");
-    setTimeout(() => firstBuilt().scrollIntoView({ behavior: "smooth", block: "start" }), 400);
   }
-}
-
-function firstBuilt() {
-  return ui.steps.find((element) => element.classList.contains("built")) ?? ui.content;
+  setTimeout(() => {
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    thumb();
+  }, 350);
 }
 
 function setStatus(text) {
@@ -334,49 +337,64 @@ ui.again.addEventListener("click", () => newGame(true));
 ui.sound.addEventListener("click", () => {
   soundOn = !soundOn;
   write(SOUND_KEY, soundOn);
-  ui.sound.textContent = soundOn ? "Sound on" : "Sound off";
-  ui.sound.setAttribute("aria-pressed", String(soundOn));
+  soundButton();
 });
 
 ui.reveal.addEventListener("click", (event) => {
   event.preventDefault();
   build(STEPS);
-  firstBuilt().scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-const wide = matchMedia("(min-width: 901px)");
-let offset = 0;
-
-function measure() {
-  ui.game.style.transform = "none";
-  const layout = ui.layout.getBoundingClientRect();
-  const rect = ui.game.getBoundingClientRect();
-  offset = layout.left + layout.width / 2 - (rect.left + rect.width / 2);
-  slide();
-}
-
-function slide() {
-  if (!wide.matches) {
-    ui.game.style.transform = "none";
+function thumb() {
+  const doc = document.documentElement;
+  const range = doc.scrollHeight - innerHeight;
+  const bar = ui.evalBar.clientHeight;
+  if (range <= 0) {
+    ui.evalThumb.hidden = true;
     return;
   }
-  const progress = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.6)));
-  ui.game.style.transform = `translateX(${offset * (1 - progress)}px)`;
+  ui.evalThumb.hidden = false;
+  const height = Math.max(28, (innerHeight / doc.scrollHeight) * bar);
+  const top = (scrollY / range) * (bar - height);
+  ui.evalThumb.style.height = `${height}px`;
+  ui.evalThumb.style.top = `${top}px`;
 }
+
+function scrollFromPointer(event) {
+  const rect = ui.evalBar.getBoundingClientRect();
+  const doc = document.documentElement;
+  const fraction = (event.clientY - rect.top) / rect.height;
+  scrollTo({ top: fraction * (doc.scrollHeight - innerHeight), behavior: "auto" });
+}
+
+let dragging = false;
+ui.evalBar.addEventListener("pointerdown", (event) => {
+  dragging = true;
+  ui.evalBar.setPointerCapture(event.pointerId);
+  scrollFromPointer(event);
+});
+ui.evalBar.addEventListener("pointermove", (event) => dragging && scrollFromPointer(event));
+ui.evalBar.addEventListener("pointerup", () => (dragging = false));
+ui.evalBar.addEventListener("pointercancel", () => (dragging = false));
 
 let ticking = false;
 window.addEventListener("scroll", () => {
   if (!ticking) {
     ticking = true;
     requestAnimationFrame(() => {
-      slide();
+      thumb();
       ticking = false;
     });
   }
 });
-window.addEventListener("resize", measure);
+window.addEventListener("resize", thumb);
 
-ui.sound.textContent = soundOn ? "Sound on" : "Sound off";
-ui.sound.setAttribute("aria-pressed", String(soundOn));
+function soundButton() {
+  ui.soundIcon.setAttribute("href", soundOn ? "#i-speaker-high" : "#i-speaker-slash");
+  ui.sound.setAttribute("aria-pressed", String(soundOn));
+  ui.sound.setAttribute("aria-label", soundOn ? "Sound on" : "Sound off");
+}
+
+soundButton();
 newGame(false);
-measure();
+thumb();
