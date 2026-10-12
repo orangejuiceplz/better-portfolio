@@ -45,24 +45,22 @@
   <header class="top">
     <a class="mark" href="#game"><svg class="icon" aria-hidden="true"><use href="#i-horse"/></svg> Shiven Kishore</a>
     <div class="tools">
-      <button id="sound" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true"><use id="sound-icon" href="#i-speaker-high"/></svg> <span>Sound</span></button>
-      <a id="reveal" href="#site"><svg class="icon" aria-hidden="true"><use href="#i-lock-open"/></svg> <span>Reveal all</span></a>
-      <a href="credits/"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg> <span>Credits</span></a>
+      <button id="sound" type="button" class="btn square small" aria-pressed="true" title="Sound"><svg class="icon" aria-hidden="true"><use id="sound-icon" href="#i-speaker-high"/></svg></button>
+      <a id="reveal" href="#site" class="btn square small" title="Reveal all" aria-label="Reveal all"><svg class="icon" aria-hidden="true"><use href="#i-lock-open"/></svg></a>
+      <a href="credits/" class="btn square small" title="Credits" aria-label="Credits"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></a>
     </div>
   </header>
 
   <main class="layout">
     <div id="site" class="site">
       <section class="intro" data-step="1" aria-label="Introduction">
-        <p class="eyebrow">White to move</p>
         <h1>Shiven Kishore</h1>
         <p class="lede">Student, builder, and founder from Howell, NJ. Teaches kids how computers work, programs a competition robot, and writes capture-the-flag challenges.</p>
-        <p class="facts">Freehold High School &middot; Class of 2027 &middot; GPA 4.8</p>
+        <p class="facts">Freehold High School &middot; Class of 2027 &middot; GPA 4.8 weighted</p>
       </section>
 
       <section id="opening" class="section" data-step="2" aria-labelledby="opening-title">
         <header class="section-head">
-          <p class="eyebrow">1. The opening</p>
           <h2 id="opening-title">Education</h2>
         </header>
         <article class="card piece-card">
@@ -83,7 +81,6 @@
 
       <section id="middlegame" class="section" data-step="3" aria-labelledby="middlegame-title">
         <header class="section-head">
-          <p class="eyebrow">2. The middlegame</p>
           <h2 id="middlegame-title">Activities and leadership</h2>
         </header>
         <div class="grid">
@@ -142,7 +139,6 @@
 
       <section id="endgame" class="section" data-step="6" aria-labelledby="endgame-title">
         <header class="section-head">
-          <p class="eyebrow">3. The endgame</p>
           <h2 id="endgame-title">Awards and service</h2>
         </header>
         <div class="grid">
@@ -179,7 +175,6 @@
 
       <section id="repertoire" class="section" data-step="7" aria-labelledby="repertoire-title">
         <header class="section-head">
-          <p class="eyebrow">4. The repertoire</p>
           <h2 id="repertoire-title">Skills and certifications</h2>
         </header>
         <div class="grid three">
@@ -210,17 +205,6 @@
         </div>
       </section>
 
-      <footer id="contact" class="foot" data-step="8" aria-labelledby="contact-title">
-        <p class="eyebrow">1-0</p>
-        <h2 id="contact-title">Your move</h2>
-        <ul class="contact">
-          <li><svg class="icon" aria-hidden="true"><use href="#i-envelope-simple"/></svg><a href="mailto:shivenkishore@icloud.com">shivenkishore@icloud.com</a></li>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+17329241752">(732) 924-1752</a></li>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-github-logo"/></svg><a href="https://github.com/orangejuiceplz" rel="me noopener">github.com/orangejuiceplz</a></li>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-map-pin"/></svg>Howell, NJ</li>
-        </ul>
-        <p class="fine">Shiven Kishore &middot; <a href="credits/">Credits</a></p>
-      </footer>
     </div>
 
     <aside id="game" class="stage" aria-label="Chess puzzle">
@@ -235,10 +219,10 @@
         <div class="side">
           <p id="status" class="status" role="status" aria-live="polite">White to move</p>
           <div class="controls">
-            <button id="hint" type="button"><svg class="icon" aria-hidden="true"><use href="#i-lightbulb"/></svg> Hint</button>
-            <button id="show" type="button"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg> Show the move</button>
-            <button id="back" type="button" class="warn" hidden><svg class="icon" aria-hidden="true"><use href="#i-arrow-counter-clockwise"/></svg> Take back</button>
-            <button id="again" type="button"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg> New game</button>
+            <button id="hint" type="button" class="btn square" aria-label="Hint" title="Hint"><svg class="icon" aria-hidden="true"><use href="#i-lightbulb"/></svg></button>
+            <button id="show" type="button" class="btn primary">Show the move</button>
+            <button id="back" type="button" class="btn primary danger" hidden><svg class="icon" aria-hidden="true"><use href="#i-arrow-counter-clockwise"/></svg> Take back</button>
+            <button id="again" type="button" class="btn square" aria-label="New game" title="New game"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg></button>
           </div>
           <ol id="moves" class="moves" aria-label="Moves played"></ol>
           <p id="credit" class="credit"></p>
@@ -246,6 +230,19 @@
       </div>
     </aside>
   </main>
+
+  <footer id="contact" class="foot" data-step="8" aria-label="Contact">
+    <div class="foot-inner">
+      <p class="foot-name">Shiven Kishore</p>
+      <ul class="contact">
+        <li><svg class="icon" aria-hidden="true"><use href="#i-envelope-simple"/></svg><a href="mailto:shivenkishore@icloud.com">shivenkishore@icloud.com</a></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+17329241752">(732) 924-1752</a></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-github-logo"/></svg><a href="https://github.com/orangejuiceplz" rel="me noopener">github.com/orangejuiceplz</a></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-map-pin"/></svg>Howell, NJ</li>
+      </ul>
+      <a class="foot-credits" href="credits/">Credits</a>
+    </div>
+  </footer>
 
   <div id="scrollhint" class="scrollhint" aria-hidden="true" hidden><div class="scrollhint-thumb"></div></div>
 

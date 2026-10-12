@@ -247,6 +247,15 @@ function updateControls() {
   ui.hint.hidden = over || wrong;
   ui.show.hidden = over || wrong;
   ui.back.hidden = !wrong;
+  ui.again.hidden = wrong;
+  ui.again.classList.toggle("primary", over);
+  ui.again.classList.toggle("square", !over);
+  ui.again.textContent = "";
+  if (over) {
+    ui.again.append("New game");
+  } else {
+    ui.again.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg>';
+  }
 }
 
 function advance(move) {
@@ -425,6 +434,7 @@ window.addEventListener("resize", fit);
 
 function soundButton() {
   ui.soundIcon.setAttribute("href", soundOn ? "#i-speaker-high" : "#i-speaker-slash");
+  ui.sound.title = soundOn ? "Sound on" : "Sound off";
   ui.sound.setAttribute("aria-pressed", String(soundOn));
   ui.sound.setAttribute("aria-label", soundOn ? "Sound on" : "Sound off");
 }
