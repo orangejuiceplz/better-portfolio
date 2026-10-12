@@ -1,3 +1,27 @@
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url("fonts/fraunces-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/plexmono-400-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/plexmono-500-latin.woff2") format("woff2");
+}
+
 :root {
   --bg: #15100c;
   --bg-raised: #1f1710;
@@ -6,7 +30,8 @@
   --line: #3a2d22;
   --dark-sq: #6b4426;
   --gold: #d4a84b;
-  --serif: Georgia, "Times New Roman", Times, serif;
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --mono: "Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --radius: 14px;
   --measure: 78rem;
@@ -55,15 +80,24 @@ body {
 h1, h2, h3, h4 {
   font-family: var(--serif);
   font-weight: 600;
-  line-height: 1.15;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  line-height: 1.08;
   margin: 0 0 0.5rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
-h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); }
-h2 { font-size: clamp(1.8rem, 3.4vw, 2.5rem); }
-h3 { font-size: 1.3rem; }
-h4 { font-size: 1rem; color: var(--ink-soft); margin-top: 1.25rem; }
+h1 { font-size: clamp(2.8rem, 6.5vw, 4.8rem); font-weight: 700; }
+h2 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); }
+h3 { font-size: 1.35rem; font-variation-settings: "opsz" 48; }
+h4 {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 1.4rem;
+}
 
 p {
   margin: 0 0 0.75rem;
@@ -147,11 +181,12 @@ button {
 }
 
 .tools button {
-  background: none;
-  border: 1px solid var(--line);
-  border-radius: 999px;
+  background: linear-gradient(180deg, #27201a, var(--bg-raised));
+  border: 1px solid #45362a;
+  border-radius: 8px;
   color: var(--ink-soft);
-  padding: 0.3rem 0.8rem;
+  padding: 0.3rem 0.75rem;
+  box-shadow: 0 2px 0 #0a0705;
 }
 
 .tools button:hover,
@@ -278,7 +313,8 @@ main {
 
 .status {
   font-family: var(--serif);
-  font-size: 1.15rem;
+  font-variation-settings: "opsz" 48;
+  font-size: 1.2rem;
   min-height: 2.9rem;
   margin: 0;
 }
@@ -292,30 +328,58 @@ main {
 .controls button {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: var(--bg-raised);
-  border: 1px solid var(--line);
-  border-radius: 999px;
+  gap: 0.45rem;
+  padding: 0.6rem 1.05rem;
+  border-radius: 10px;
+  border: 1px solid #4a3a2c;
+  background: linear-gradient(180deg, #2b221b, #1d1510);
   color: var(--ink);
-  padding: 0.45rem 0.9rem;
   font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 3px 0 #0a0705, inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
 
 .controls button:hover {
   border-color: var(--gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 #0a0705, inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.controls button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0a0705;
+}
+
+.controls button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.controls #show {
+  background: linear-gradient(180deg, #e2b85f, #c4973f);
+  border-color: #a77c2e;
+  color: #1a120c;
+  box-shadow: 0 3px 0 #6e4f1a, inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.controls #show:hover {
+  box-shadow: 0 4px 0 #6e4f1a, inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .controls .warn {
-  border-color: #b5533a;
-  color: #f0b4a3;
+  background: linear-gradient(180deg, #4a2a22, #33201a);
+  border-color: #8a4a3a;
+  color: #f3c1b0;
+  box-shadow: 0 3px 0 #1c0f0b;
 }
 
 .moves {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.15rem 0.75rem;
-  font-family: var(--serif);
-  font-size: 0.98rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
   max-height: 7rem;
   overflow-y: auto;
 }
@@ -328,7 +392,7 @@ main {
 
 .credit {
   color: var(--ink-soft);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   margin: 0;
 }
 
@@ -362,10 +426,13 @@ main {
 }
 
 .eyebrow {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
 }
 
 .lede {
@@ -390,10 +457,11 @@ main {
 }
 
 .card {
-  background: var(--bg-raised);
+  background: linear-gradient(180deg, #211912, var(--bg-raised));
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1.6rem;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
 .card p:last-child {
@@ -401,8 +469,9 @@ main {
 }
 
 .meta {
+  font-family: var(--mono);
   color: var(--ink-soft);
-  font-size: 0.92rem;
+  font-size: 0.8rem;
 }
 
 .stat {
@@ -423,16 +492,17 @@ main {
 }
 
 .chips li {
-  padding: 0.35rem 0.8rem;
-  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
   border: 1px solid var(--line);
   background: var(--bg);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
 .chips b {
+  font-family: var(--mono);
   color: var(--gold);
-  margin-left: 0.4rem;
+  margin-left: 0.45rem;
 }
 
 .grid {
@@ -484,10 +554,11 @@ main {
 }
 
 .move {
-  font-family: var(--serif);
-  font-size: 1.6rem;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 1.3rem;
   color: var(--gold);
-  line-height: 1.2;
+  line-height: 1.4;
 }
 
 .scoresheet b {
@@ -508,15 +579,43 @@ main {
 }
 
 .list span {
+  font-family: var(--mono);
   color: var(--ink-soft);
-  font-size: 0.92rem;
+  font-size: 0.8rem;
 }
 
 .contact {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 2rem;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+}
+
+.contact li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contact .icon {
+  color: var(--gold);
+}
+
+.foot {
+  margin-top: 1rem;
+  padding: clamp(2.5rem, 6vw, 4rem) 0 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.fine {
+  margin-top: 2rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.credit {
+  font-family: var(--mono);
 }
 
 .prose {
@@ -627,7 +726,7 @@ main {
 }
 
 @media print {
-  .top, .stage, .scrollhint, .skip {
+  .top, .stage, .scrollhint, .skip, .fine {
     display: none;
   }
 
