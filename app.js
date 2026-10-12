@@ -14,15 +14,16 @@ const VALUE = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const CHESSCOM = "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/";
 const FALLBACK = { "move-self": "Move", "move-opponent": "Move", capture: "Capture", castle: "Move", promote: "Move", "move-check": "Check", "game-end": "Victory" };
 
+const ICONS = "vendor/chesscom/";
 const VERDICTS = {
-  brilliant: { text: "Brilliant", mark: "!!", color: "#1baca6" },
-  great: { text: "Great move", mark: "!", color: "#5c8bb0" },
-  best: { text: "Best move", mark: "★", color: "#96bc4b" },
-  excellent: { text: "Excellent", mark: "✓", color: "#96bc4b" },
-  good: { text: "Good", mark: "✓", color: "#96af8b" },
-  inaccuracy: { text: "Inaccuracy", mark: "?!", color: "#f7c631" },
-  mistake: { text: "Mistake", mark: "?", color: "#e6912c" },
-  blunder: { text: "Blunder", mark: "??", color: "#fa412d" },
+  brilliant: { text: "Brilliant", icon: "brilliant" },
+  great: { text: "Great", icon: "great" },
+  best: { text: "Best", icon: "best" },
+  excellent: { text: "Excellent", icon: "excellent" },
+  good: { text: "Good", icon: "good" },
+  inaccuracy: { text: "Inaccuracy", icon: "inaccuracy" },
+  mistake: { text: "Mistake", icon: "mistake" },
+  blunder: { text: "Blunder", icon: "blunder" },
 };
 
 const games = [
@@ -111,7 +112,7 @@ const ui = {
   show: document.getElementById("show"),
   back: document.getElementById("back"),
   again: document.getElementById("again"),
-  moves: document.getElementById("moves"),
+  review: document.getElementById("review"),
   credit: document.getElementById("credit"),
   evalBar: document.getElementById("eval"),
   evalLabel: document.getElementById("eval-label"),
@@ -137,6 +138,7 @@ let hints = 0;
 let wrong = false;
 let built = 0;
 let busy = false;
+let review = [];
 const chess = new Chess();
 
 let engine = null;
@@ -232,15 +234,27 @@ function sync(lastMove) {
   });
 }
 
-function renderMoves() {
-  const history = chess.history();
-  ui.moves.replaceChildren();
-  for (let i = 0; i < history.length; i += 2) {
-    const item = document.createElement("li");
-    item.innerHTML = `<span>${game.from + i / 2}.</span> ${history[i]} ${history[i + 1] ?? ""}`;
-    ui.moves.append(item);
+function icon(verdict, size) {
+  const { text, icon: name } = VERDICTS[verdict];
+  return `<img src="${ICONS}${name}.png" alt="${text}" width="${size}" height="${size}">`;
+}
+
+function moveCell(entry) {
+  if (!entry) {
+    return "";
   }
-  ui.moves.scrollTop = ui.moves.scrollHeight;
+  const score = entry.score ? `<small>${formatScore(entry.score)}</small>` : "";
+  return `<span class="mv">${entry.verdict ? icon(entry.verdict, 18) : ""}${entry.san}${score}</span>`;
+}
+
+function renderReview() {
+  ui.review.replaceChildren();
+  for (let i = 0; i < review.length; i += 2) {
+    const item = document.createElement("li");
+    item.innerHTML = `<span class="n">${game.from + i / 2}.</span>${moveCell(review[i])}${moveCell(review[i + 1])}`;
+    ui.review.append(item);
+  }
+  ui.review.scrollTop = ui.review.scrollHeight;
 }
 
 /* Evaluation */
@@ -336,8 +350,9 @@ function classify(before, after, move) {
   if (!before?.lines[0] || !after?.lines[0]) {
     return null;
   }
-  const bestWin = winChance(before.lines[0]) * 50;
-  const afterWin = winChance(after.lines[0]) * 50;
+  const sign = move.color === "w" ? 1 : -1;
+  const bestWin = winChance(before.lines[0]) * 50 * sign;
+  const afterWin = winChance(after.lines[0]) * 50 * sign;
   const drop = bestWin - afterWin;
   const uci = move.from + move.to + (move.promotion ?? "");
   const isBest = uci === before.best;
@@ -346,7 +361,7 @@ function classify(before, after, move) {
       return "brilliant";
     }
     const second = before.lines[1];
-    if (isBest && second && bestWin - winChance(second) * 50 >= 15) {
+    if (isBest && second && bestWin - winChance(second) * 50 * sign >= 15) {
       return "great";
     }
     return "best";
@@ -359,12 +374,11 @@ function classify(before, after, move) {
 }
 
 function badge(square, verdict) {
-  const { mark: glyph, color } = VERDICTS[verdict];
   mark([
     {
       orig: square,
       customSvg: {
-        html: `<g transform="translate(80 20)"><circle r="17" fill="${color}" stroke="rgba(0,0,0,0.35)" stroke-width="1.5"/><text y="6" font-size="17" font-weight="700" font-family="Trebuchet MS, sans-serif" text-anchor="middle" fill="#fff">${glyph}</text></g>`,
+        html: `<image href="${ICONS}${VERDICTS[verdict].icon}.png" x="62" y="2" width="36" height="36"/>`,
       },
     },
   ]);
@@ -372,7 +386,7 @@ function badge(square, verdict) {
 
 function verdictText(verdict, after) {
   const score = after?.lines[0] ? ` Eval ${formatScore(after.lines[0])}.` : "";
-  return `${VERDICTS[verdict].text}.${score}`;
+  return `${icon(verdict, 22)}${VERDICTS[verdict].text}.${score}`;
 }
 
 /* Game flow */
@@ -398,8 +412,8 @@ function build(level) {
   }, 350);
 }
 
-function setStatus(text) {
-  ui.status.textContent = text;
+function setStatus(html) {
+  ui.status.innerHTML = html;
 }
 
 function updateControls() {
@@ -426,17 +440,24 @@ async function advance(move, before) {
   mark([]);
   soundFor(move, true);
   sync([move.from, move.to]);
-  renderMoves();
+  renderReview();
   build(Math.round((done / pairs.length) * STEPS));
   updateControls();
   const over = done === pairs.length;
   setStatus(over ? "Checkmate. 1-0" : "Reviewing…");
 
+  review.push({ san: move.san, verdict: null, score: null });
+  renderReview();
+
   const after = await analysePosition();
   const verdict = over ? (isSacrifice(move) ? "brilliant" : "best") : classify(before, after, move);
+  const mine = review.at(-1);
+  mine.verdict = verdict;
+  mine.score = after?.lines[0] ?? null;
+  renderReview();
   if (verdict) {
     badge(move.to, verdict);
-    setStatus(over ? `${VERDICTS[verdict].text}. Checkmate, 1-0.` : verdictText(verdict, after));
+    setStatus(over ? `${icon(verdict, 22)}${VERDICTS[verdict].text}. Checkmate, 1-0.` : verdictText(verdict, after));
   } else if (!over) {
     setStatus("White to move");
   }
@@ -451,9 +472,16 @@ async function advance(move, before) {
   soundFor(reply, false);
   busy = false;
   sync([reply.from, reply.to]);
-  renderMoves();
+  review.push({ san: reply.san, verdict: null, score: null });
+  renderReview();
   updateControls();
-  analysePosition();
+  const replyEval = await analysePosition();
+  if (review.at(-1)?.san === reply.san && replyEval) {
+    const theirs = review.at(-1);
+    theirs.verdict = classify(after, replyEval, reply);
+    theirs.score = replyEval.lines[0] ?? null;
+    renderReview();
+  }
 }
 
 async function onMove(from, to) {
@@ -505,13 +533,14 @@ function newGame(fromClick) {
     pairs.push({ white: moves[i], black: moves[i + 1] ?? null });
   }
   chess.load(game.fen);
+  review = [];
   done = 0;
   hints = 0;
   wrong = false;
   busy = false;
   mark([]);
   sync();
-  renderMoves();
+  renderReview();
   ui.credit.textContent = `${game.credit}, from move ${game.from}.`;
   setStatus("White to move");
   updateControls();
