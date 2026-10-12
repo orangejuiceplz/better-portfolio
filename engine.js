@@ -46,11 +46,22 @@ export class Engine {
   }
 
   analyse(fen, movetime, onInfo) {
+    return this.start(fen, onInfo, [`setoption name Skill Level value 20`, `go movetime ${movetime}`]);
+  }
+
+  play(fen, { skill, depth, movetime }) {
+    const go = depth ? `go depth ${depth}` : `go movetime ${movetime}`;
+    return this.start(fen, null, [`setoption name Skill Level value ${skill}`, go]).then((r) => r.best);
+  }
+
+  start(fen, onInfo, commands) {
     const run = () =>
       new Promise((resolve) => {
         this.job = { fen, white: fen.split(" ")[1] === "w", lines: [], best: null, resolve, onInfo };
         this.send(`position fen ${fen}`);
-        this.send(`go movetime ${movetime}`);
+        for (const command of commands) {
+          this.send(command);
+        }
       });
     const previous = this.queue;
     if (this.job) {

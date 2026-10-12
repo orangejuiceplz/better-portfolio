@@ -6,6 +6,10 @@ The board starts centered. After the first move the page scrolls to the first bl
 
 The board is [chessground](https://github.com/lichess-org/chessground), the board lichess uses. Rules and checkmate detection come from [chess.js](https://github.com/jhlywa/chess.js). [Stockfish 19](https://github.com/nmrugg/stockfish.js) runs in the browser as WebAssembly (the 1.8 MB lite single-threaded build, so no special headers are needed) and drives the evaluation bar and the move review: every move you play, right or wrong, gets a chess.com style verdict from Brilliant to Blunder, shown with Chess.com's own classification icons as a badge on the square and in the move review list beside the board. Black's replies are reviewed too. Icons are [Phosphor](https://phosphoricons.com), inlined as an SVG sprite. Sounds are chess.com's default set (game start, move, capture, castle, check, promote, game end, illegal, notify), loaded from chess.com's CDN at runtime. If those cannot load, the move, capture, check and game end sounds fall back to the AGPL "sfx" set from lichess, vendored under `vendor/sounds`.
 
+## Hard mode: play Stockfish
+
+Under the move list, "Play Stockfish instead" starts a game from the opening position with you as White. Pick a level from 100 to 3000. The lower levels mix random moves with a shallow, handicapped search; 1600 and 2000 use Stockfish's skill level setting; 3000 is the engine at full strength with one second a move. The portfolio unlocks as your winning chances grow: each tenth of win probability above even opens the next block, and checkmate opens everything. Hint marks the engine's suggestion, Show the move plays it, Take back undoes your last move and the reply. The levels are approximate, not calibrated ratings.
+
 ## Run it locally
 
 The page uses JavaScript modules, so serve the folder instead of opening the file directly:

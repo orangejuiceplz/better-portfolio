@@ -209,13 +209,11 @@
 
     <aside id="game" class="stage" aria-label="Chess puzzle">
       <div class="game">
-        <div class="boardrow">
-          <div id="eval" class="eval" role="img" aria-labelledby="eval-label">
-            <div class="eval-white"></div>
-            <span id="eval-label">0.0</span>
-          </div>
-          <div id="board" class="board" aria-label="Chessboard"></div>
+        <div id="eval" class="eval" role="img" aria-labelledby="eval-label">
+          <div class="eval-white"></div>
+          <span id="eval-label">0.0</span>
         </div>
+        <div id="board" class="board" aria-label="Chessboard"></div>
         <div class="side">
           <p id="status" class="status" role="status" aria-live="polite">White to move</p>
           <div class="controls">
@@ -224,8 +222,23 @@
             <button id="back" type="button" class="btn primary danger" hidden><svg class="icon" aria-hidden="true"><use href="#i-arrow-counter-clockwise"/></svg> Take back</button>
             <button id="again" type="button" class="btn square" aria-label="New game" title="New game"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg></button>
           </div>
+          <div id="levels" class="levels" hidden>
+            <p class="levels-title">Pick a level</p>
+            <div class="levels-row">
+              <button type="button" class="btn level" data-level="100">100</button>
+              <button type="button" class="btn level" data-level="400">400</button>
+              <button type="button" class="btn level" data-level="800">800</button>
+              <button type="button" class="btn level" data-level="1600">1600</button>
+              <button type="button" class="btn level" data-level="2000">2000</button>
+              <button type="button" class="btn level" data-level="3000">3000</button>
+            </div>
+          </div>
           <ol id="review" class="review" aria-label="Move review"></ol>
           <p id="credit" class="credit"></p>
+          <p class="modes">
+            <button id="versus" type="button" class="linkish"><svg class="icon" aria-hidden="true"><use href="#i-robot"/></svg> Play Stockfish instead (hard mode)</button>
+            <button id="puzzles" type="button" class="linkish" hidden><svg class="icon" aria-hidden="true"><use href="#i-horse"/></svg> Back to the famous games</button>
+          </p>
         </div>
       </div>
     </aside>

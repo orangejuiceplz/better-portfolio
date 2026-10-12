@@ -18,8 +18,9 @@
   --radius: 8px;
   --measure: 78rem;
   --top: 3.8rem;
-  --board: min(38vw, 62vh, 30rem);
-  --game-w: calc(var(--board) + 2.35rem);
+  --board: min(30vw, 62vh, 30rem);
+  --side-w: 18rem;
+  --game-w: calc(var(--board) + 1.6rem + 1.75rem + var(--side-w));
 }
 
 * {
@@ -120,10 +121,11 @@ button {
   gap: 0.5rem;
   border: 0;
   border-radius: 6px;
-  padding: 0 1.4rem;
-  height: 3.1rem;
+  padding: 0 0.9rem;
+  height: 2.9rem;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
+  white-space: nowrap;
   color: #fff;
   background: var(--key);
   box-shadow: 0 4px 0 var(--key-edge);
@@ -167,9 +169,9 @@ button {
 }
 
 .btn.square {
-  width: 3.1rem;
+  width: 2.9rem;
   padding: 0;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   color: var(--ink);
 }
 
@@ -249,6 +251,7 @@ main {
 .site {
   min-width: 0;
   padding: calc(100vh - var(--top)) 0 3rem;
+  container-type: inline-size;
 }
 
 .site:not(:has(.built)) {
@@ -268,19 +271,14 @@ main {
   width: var(--game-w);
 }
 
-.game {
-  display: grid;
-  gap: 1rem;
-  will-change: transform;
-}
-
 /* Board and eval */
 
-.boardrow {
+.game {
   display: grid;
-  grid-template-columns: 1.6rem var(--board);
+  grid-template-columns: 1.6rem var(--board) var(--side-w);
   gap: 0.75rem;
   align-items: stretch;
+  will-change: transform;
 }
 
 .board {
@@ -353,16 +351,19 @@ main {
 /* Side panel */
 
 .side {
-  display: grid;
-  gap: 0.85rem;
-  padding-left: 2.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-width: 0;
+  height: var(--board);
+  margin-left: 0.5rem;
 }
 
 .status {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #fff;
-  min-height: 2.9rem;
+  min-height: 2.6rem;
   margin: 0;
 }
 
@@ -373,9 +374,11 @@ main {
 
 .review {
   display: grid;
+  align-content: start;
   gap: 0.2rem;
-  font-size: 0.95rem;
-  max-height: 9.5rem;
+  font-size: 0.92rem;
+  flex: 1;
+  min-height: 3rem;
   overflow-y: auto;
   padding-right: 0.25rem;
 }
@@ -425,8 +428,53 @@ main {
 
 .credit {
   color: var(--ink-soft);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   margin: 0;
+}
+
+.modes {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+.linkish {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.linkish:hover {
+  text-decoration: underline;
+}
+
+.levels-title {
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.levels-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+}
+
+.btn.level {
+  height: 2.4rem;
+  padding: 0;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 0 var(--key-edge);
+}
+
+.btn.level:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--key-edge);
 }
 
 /* Content */
@@ -662,6 +710,28 @@ main {
 
 /* Responsive */
 
+@media (max-width: 1100px) {
+  :root {
+    --board: min(38vw, 62vh, 30rem);
+    --game-w: calc(var(--board) + 2.35rem);
+  }
+
+  .game {
+    grid-template-columns: 1.6rem var(--board);
+  }
+
+  .game > .side {
+    grid-column: 1 / -1;
+    height: auto;
+    margin-left: 2.35rem;
+  }
+
+  .review {
+    flex: none;
+    max-height: 8rem;
+  }
+}
+
 @media (max-width: 720px) {
   :root {
     --board: min(88vw, 58vh, 30rem);
@@ -687,9 +757,14 @@ main {
     padding: 1.25rem 0;
   }
 
-  .boardrow {
+  .game {
     grid-template-columns: var(--board);
-    grid-template-rows: 1.1rem var(--board);
+    grid-template-rows: 1.1rem var(--board) auto;
+  }
+
+  .game > .side {
+    grid-column: 1;
+    margin-left: 0;
   }
 
   .eval-white {
@@ -707,10 +782,6 @@ main {
     line-height: 1.1rem;
   }
 
-  .side {
-    width: var(--board);
-    padding-left: 0;
-  }
 
   .status {
     min-height: 0;
@@ -783,5 +854,12 @@ main {
   .section {
     padding: 1rem 0;
     break-inside: avoid;
+  }
+}
+
+@container (max-width: 36rem) {
+  .grid,
+  .grid.three {
+    grid-template-columns: 1fr;
   }
 }

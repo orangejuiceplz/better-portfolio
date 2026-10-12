@@ -11,6 +11,15 @@ const LADDER = [
 const ENGINE_URL = "vendor/stockfish/stockfish-19-lite-single.js";
 const MOVETIME = 900;
 const VALUE = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const LEVELS = {
+  100: { skill: 0, depth: 1, random: 0.8 },
+  400: { skill: 0, depth: 1, random: 0.4 },
+  800: { skill: 3, depth: 2, random: 0.1 },
+  1600: { skill: 8, depth: 5, random: 0 },
+  2000: { skill: 13, depth: 9, random: 0 },
+  3000: { skill: 20, movetime: 1000, random: 0 },
+};
+const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const CHESSCOM = "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/";
 const FALLBACK = { "move-self": "Move", "move-opponent": "Move", capture: "Capture", castle: "Move", promote: "Move", "move-check": "Check", "game-end": "Victory" };
 
@@ -123,6 +132,10 @@ const ui = {
   sound: document.getElementById("sound"),
   soundIcon: document.getElementById("sound-icon"),
   reveal: document.getElementById("reveal"),
+  versus: document.getElementById("versus"),
+  puzzles: document.getElementById("puzzles"),
+  levels: document.getElementById("levels"),
+  levelButtons: [...document.querySelectorAll(".btn.level")],
   layout: document.querySelector(".layout"),
   game: document.querySelector(".game"),
   content: document.getElementById("site"),
@@ -139,6 +152,9 @@ let wrong = false;
 let built = 0;
 let busy = false;
 let review = [];
+let mode = "puzzle";
+let level = null;
+let over = false;
 const chess = new Chess();
 
 let engine = null;
@@ -150,7 +166,7 @@ const board = Chessground(document.getElementById("board"), {
   coordinates: true,
   premovable: { enabled: false },
   drawable: { enabled: false },
-  movable: { free: false, showDests: true, events: { after: onMove } },
+  movable: { free: false, showDests: true, rookCastle: false, events: { after: onMove } },
 });
 
 function read(key, fallback) {
@@ -251,7 +267,7 @@ function renderReview() {
   ui.review.replaceChildren();
   for (let i = 0; i < review.length; i += 2) {
     const item = document.createElement("li");
-    item.innerHTML = `<span class="n">${game.from + i / 2}.</span>${moveCell(review[i])}${moveCell(review[i + 1])}`;
+    item.innerHTML = `<span class="n">${(mode === "versus" ? 1 : game.from) + i / 2}.</span>${moveCell(review[i])}${moveCell(review[i + 1])}`;
     ui.review.append(item);
   }
   ui.review.scrollTop = ui.review.scrollHeight;
@@ -278,7 +294,7 @@ function showResult() {
     const whiteWon = chess.turn() === "b";
     setBar(whiteWon ? 100 : 0, whiteWon ? "1-0" : "0-1");
   } else {
-    setBar(50, "0.0");
+    setBar(50, "\u00bd");
   }
 }
 
@@ -417,19 +433,28 @@ function setStatus(html) {
 }
 
 function updateControls() {
-  const over = done === pairs.length;
-  ui.hint.hidden = over || wrong || busy;
-  ui.show.hidden = over || wrong || busy;
-  ui.back.hidden = !wrong;
+  const finished = mode === "versus" ? over : done === pairs.length;
+  ui.hint.hidden = finished || wrong || busy;
+  ui.show.hidden = finished || wrong || busy;
+  ui.back.hidden = mode === "versus" ? wrong || busy || review.length === 0 : !wrong;
+  ui.back.classList.toggle("danger", mode === "puzzle" || wrong);
+  ui.back.classList.toggle("primary", mode === "puzzle" || wrong);
+  ui.back.classList.toggle("square", mode === "versus" && !wrong);
+  ui.back.innerHTML = mode === "versus" && !wrong
+    ? '<svg class="icon" aria-hidden="true"><use href="#i-arrow-counter-clockwise"/></svg>'
+    : '<svg class="icon" aria-hidden="true"><use href="#i-arrow-counter-clockwise"/></svg> Take back';
+  ui.back.title = "Take back";
   ui.again.hidden = wrong || busy;
-  ui.again.classList.toggle("primary", over);
-  ui.again.classList.toggle("square", !over);
+  ui.again.classList.toggle("primary", finished);
+  ui.again.classList.toggle("square", !finished);
   ui.again.textContent = "";
-  if (over) {
+  if (finished) {
     ui.again.append("New game");
   } else {
     ui.again.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg>';
   }
+  ui.versus.hidden = mode === "versus";
+  ui.puzzles.hidden = mode === "puzzle";
 }
 
 async function advance(move, before) {
@@ -491,6 +516,10 @@ async function onMove(from, to) {
     sync();
     return;
   }
+  if (mode === "versus") {
+    versusMove(move, before);
+    return;
+  }
   if (move.san === pairs[done].white || chess.isCheckmate()) {
     advance(move, before);
     return;
@@ -514,7 +543,150 @@ async function onMove(from, to) {
   }
 }
 
+/* Versus mode */
+
+function unlockByScore(score) {
+  if (!score) {
+    return;
+  }
+  const step = Math.max(0, Math.min(STEPS, Math.floor(winChance(score) * 10)));
+  if (step > built) {
+    build(step);
+  }
+}
+
+function endVersus() {
+  over = true;
+  busy = false;
+  showResult();
+  if (chess.isCheckmate()) {
+    const whiteWon = chess.turn() === "b";
+    if (whiteWon) {
+      build(STEPS);
+    }
+    setStatus(whiteWon ? "Checkmate. You win, 1-0." : "Checkmate. Stockfish wins, 0-1.");
+  } else {
+    setStatus("Draw.");
+  }
+  sync();
+  updateControls();
+}
+
+async function engineReply() {
+  const config = LEVELS[level];
+  let uci = null;
+  if (Math.random() < config.random) {
+    const legal = chess.moves({ verbose: true });
+    const pick = legal[Math.floor(Math.random() * legal.length)];
+    uci = pick.from + pick.to + (pick.promotion ?? "");
+  } else if (engineReady) {
+    uci = await engine.play(chess.fen(), config);
+  }
+  if (!uci || uci === "(none)") {
+    const legal = chess.moves({ verbose: true });
+    const pick = legal[Math.floor(Math.random() * legal.length)];
+    uci = pick.from + pick.to + (pick.promotion ?? "");
+  }
+  return chess.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+}
+
+async function versusMove(move, before) {
+  busy = true;
+  mark([]);
+  soundFor(move, true);
+  sync([move.from, move.to]);
+  review.push({ san: move.san, verdict: null, score: null });
+  renderReview();
+  updateControls();
+  if (chess.isGameOver()) {
+    if (chess.isCheckmate()) {
+      badge(move.to, isSacrifice(move) ? "brilliant" : "best");
+      review.at(-1).verdict = "best";
+      renderReview();
+    }
+    endVersus();
+    return;
+  }
+  setStatus("Reviewing\u2026");
+  const after = await analysePosition();
+  const verdict = classify(before, after, move);
+  const mine = review.at(-1);
+  mine.verdict = verdict;
+  mine.score = after?.lines[0] ?? null;
+  renderReview();
+  if (verdict) {
+    badge(move.to, verdict);
+    setStatus(verdictText(verdict, after));
+  } else {
+    setStatus("Stockfish is thinking\u2026");
+  }
+  unlockByScore(after?.lines[0]);
+
+  await wait(verdict ? 700 : 300);
+  const reply = await engineReply();
+  soundFor(reply, false);
+  busy = false;
+  sync([reply.from, reply.to]);
+  review.push({ san: reply.san, verdict: null, score: null });
+  renderReview();
+  if (chess.isGameOver()) {
+    endVersus();
+    return;
+  }
+  updateControls();
+  const replyEval = await analysePosition();
+  if (review.at(-1)?.san === reply.san && replyEval) {
+    const theirs = review.at(-1);
+    theirs.verdict = classify(after, replyEval, reply);
+    theirs.score = replyEval.lines[0] ?? null;
+    renderReview();
+    unlockByScore(replyEval.lines[0]);
+  }
+}
+
+function startVersus(chosen) {
+  mode = "versus";
+  level = chosen;
+  over = false;
+  chess.load(START);
+  review = [];
+  hints = 0;
+  wrong = false;
+  busy = false;
+  mark([]);
+  ui.levels.hidden = true;
+  sync();
+  renderReview();
+  ui.credit.textContent = `You are White against Stockfish at ${level}. Hard mode: the page unlocks as your winning chances grow.`;
+  setStatus("Your move.");
+  updateControls();
+  analysePosition();
+  play("game-start");
+}
+
+function showLevels() {
+  ui.levels.hidden = !ui.levels.hidden;
+}
+
 function takeBack() {
+  if (mode === "versus" && !wrong) {
+    if (busy || review.length === 0) {
+      return;
+    }
+    const plies = chess.turn() === "w" && review.length >= 2 ? 2 : 1;
+    for (let i = 0; i < plies; i += 1) {
+      chess.undo();
+      review.pop();
+    }
+    over = false;
+    mark([]);
+    sync();
+    renderReview();
+    setStatus("Your move.");
+    updateControls();
+    analysePosition();
+    return;
+  }
   chess.undo();
   wrong = false;
   mark([]);
@@ -526,6 +698,10 @@ function takeBack() {
 }
 
 function newGame(fromClick) {
+  if (mode === "versus") {
+    startVersus(level);
+    return;
+  }
   game = games[Math.floor(Math.random() * games.length)];
   const moves = game.line.split(" ");
   pairs = [];
@@ -533,6 +709,7 @@ function newGame(fromClick) {
     pairs.push({ white: moves[i], black: moves[i + 1] ?? null });
   }
   chess.load(game.fen);
+  over = false;
   review = [];
   done = 0;
   hints = 0;
@@ -555,6 +732,16 @@ function wait(ms) {
 }
 
 ui.hint.addEventListener("click", () => {
+  if (mode === "versus") {
+    const best = positionEval?.best;
+    if (!best) {
+      setStatus("Still thinking. Try again in a moment.");
+      return;
+    }
+    mark([{ orig: best.slice(0, 2), dest: best.slice(2, 4), brush: "green" }]);
+    setStatus("Stockfish suggests the marked move.");
+    return;
+  }
   const step = pairs[done];
   hints += 1;
   if (hints === 1) {
@@ -568,8 +755,26 @@ ui.hint.addEventListener("click", () => {
 
 ui.show.addEventListener("click", () => {
   const before = positionEval;
+  if (mode === "versus") {
+    const best = before?.best;
+    if (!best) {
+      setStatus("Still thinking. Try again in a moment.");
+      return;
+    }
+    versusMove(chess.move({ from: best.slice(0, 2), to: best.slice(2, 4), promotion: best[4] }), before);
+    return;
+  }
   advance(chess.move(pairs[done].white), before);
 });
+ui.versus.addEventListener("click", showLevels);
+ui.puzzles.addEventListener("click", () => {
+  mode = "puzzle";
+  ui.levels.hidden = true;
+  newGame(true);
+});
+for (const button of ui.levelButtons) {
+  button.addEventListener("click", () => startVersus(Number(button.dataset.level)));
+}
 ui.back.addEventListener("click", takeBack);
 ui.again.addEventListener("click", () => newGame(true));
 
@@ -615,10 +820,16 @@ function hintScrollbar() {
 const wide = matchMedia("(min-width: 721px)");
 let offset = 0;
 
+const beside = matchMedia("(min-width: 1101px)");
+
 function fit() {
   const root = document.documentElement.style;
   if (!wide.matches) {
     root.removeProperty("--board");
+  } else if (beside.matches) {
+    const spare = innerHeight - ui.top.offsetHeight - 64;
+    const size = Math.max(260, Math.min(innerWidth * 0.3, spare, 480));
+    root.setProperty("--board", `${Math.round(size)}px`);
   } else {
     const spare = innerHeight - ui.top.offsetHeight - ui.side.offsetHeight - 48;
     const size = Math.max(220, Math.min(innerWidth * 0.38, spare, 480));
