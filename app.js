@@ -1,12 +1,29 @@
 import { Chessground } from "./vendor/chessground/chessground.min.js";
 import { Chess } from "./vendor/chess.js/chess.js";
+import { Engine, formatScore, winChance } from "./engine.js";
 
 const SOUND_KEY = "chess-portfolio-sound";
 const STEPS = 8;
-const EVALS = ["0.0", "+0.8", "+1.6", "+2.5", "+3.4", "+4.9", "M3", "M1", "1-0"];
-const SHARES = [50, 58, 64, 70, 76, 84, 92, 96, 100];
+const LADDER = [
+  { label: "0.0", share: 50 }, { label: "+0.8", share: 58 }, { label: "+1.6", share: 64 }, { label: "+2.5", share: 70 },
+  { label: "+3.4", share: 76 }, { label: "+4.9", share: 84 }, { label: "M3", share: 92 }, { label: "M1", share: 96 }, { label: "1-0", share: 100 },
+];
+const ENGINE_URL = "vendor/stockfish/stockfish-19-lite-single.js";
+const MOVETIME = 900;
+const VALUE = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const CHESSCOM = "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/";
 const FALLBACK = { "move-self": "Move", "move-opponent": "Move", capture: "Capture", castle: "Move", promote: "Move", "move-check": "Check", "game-end": "Victory" };
+
+const VERDICTS = {
+  brilliant: { text: "Brilliant", mark: "!!", color: "#1baca6" },
+  great: { text: "Great move", mark: "!", color: "#5c8bb0" },
+  best: { text: "Best move", mark: "★", color: "#96bc4b" },
+  excellent: { text: "Excellent", mark: "✓", color: "#96bc4b" },
+  good: { text: "Good", mark: "✓", color: "#96af8b" },
+  inaccuracy: { text: "Inaccuracy", mark: "?!", color: "#f7c631" },
+  mistake: { text: "Mistake", mark: "?", color: "#e6912c" },
+  blunder: { text: "Blunder", mark: "??", color: "#fa412d" },
+};
 
 const games = [
   {
@@ -119,7 +136,13 @@ let done = 0;
 let hints = 0;
 let wrong = false;
 let built = 0;
+let busy = false;
 const chess = new Chess();
+
+let engine = null;
+let engineReady = false;
+let evalToken = 0;
+let positionEval = null;
 
 const board = Chessground(document.getElementById("board"), {
   coordinates: true,
@@ -190,14 +213,22 @@ function dests() {
   return map;
 }
 
+let shapes = [];
+
+function mark(list) {
+  shapes = list;
+  board.setShapes(shapes);
+}
+
 function sync(lastMove) {
-  const locked = wrong || chess.isGameOver();
+  const locked = wrong || busy || chess.isGameOver();
   board.set({
     fen: chess.fen(),
     turnColor: chess.turn() === "w" ? "white" : "black",
     check: chess.inCheck(),
     lastMove,
     movable: { color: locked ? undefined : "white", dests: locked ? new Map() : dests() },
+    drawable: { shapes },
   });
 }
 
@@ -212,10 +243,139 @@ function renderMoves() {
   ui.moves.scrollTop = ui.moves.scrollHeight;
 }
 
-function setEval(level) {
-  ui.evalBar.style.setProperty("--white", `${SHARES[level]}%`);
-  ui.evalLabel.textContent = EVALS[level];
+/* Evaluation */
+
+function setBar(share, label) {
+  ui.evalBar.style.setProperty("--white", `${Math.min(97, Math.max(3, share))}%`);
+  ui.evalLabel.textContent = label;
 }
+
+function showLadder() {
+  const level = Math.round((done / pairs.length) * STEPS);
+  setBar(LADDER[level].share, LADDER[level].label);
+}
+
+function showScore(score) {
+  setBar(50 + 50 * winChance(score), formatScore(score));
+}
+
+function showResult() {
+  if (chess.isCheckmate()) {
+    const whiteWon = chess.turn() === "b";
+    setBar(whiteWon ? 100 : 0, whiteWon ? "1-0" : "0-1");
+  } else {
+    setBar(50, "0.0");
+  }
+}
+
+function startEngine() {
+  if (typeof Worker === "undefined" || typeof WebAssembly === "undefined") {
+    return;
+  }
+  try {
+    engine = new Engine(ENGINE_URL);
+  } catch {
+    engine = null;
+    return;
+  }
+  engine.ready.then(() => {
+    engineReady = true;
+    analysePosition();
+  });
+}
+
+async function analysePosition() {
+  positionEval = null;
+  const token = ++evalToken;
+  if (chess.isGameOver()) {
+    showResult();
+    return null;
+  }
+  if (!engineReady) {
+    showLadder();
+    return null;
+  }
+  ui.evalLabel.textContent = "…";
+  const result = await engine.analyse(chess.fen(), MOVETIME, (partial) => {
+    if (token === evalToken && partial.lines[0]) {
+      showScore(partial.lines[0]);
+      positionEval = partial;
+    }
+  });
+  if (token !== evalToken) {
+    return null;
+  }
+  if (result.lines[0]) {
+    showScore(result.lines[0]);
+  }
+  positionEval = result;
+  return result;
+}
+
+/* Move review */
+
+function see(position, square) {
+  const captures = position.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
+  if (captures.length === 0) {
+    return 0;
+  }
+  captures.sort((a, b) => VALUE[a.piece] - VALUE[b.piece]);
+  position.move(captures[0]);
+  const gain = VALUE[captures[0].captured] - see(position, square);
+  position.undo();
+  return Math.max(0, gain);
+}
+
+function isSacrifice(move) {
+  const gained = move.captured ? VALUE[move.captured] : 0;
+  const lost = see(new Chess(chess.fen()), move.to);
+  return gained - lost <= -1;
+}
+
+function classify(before, after, move) {
+  if (!before?.lines[0] || !after?.lines[0]) {
+    return null;
+  }
+  const bestWin = winChance(before.lines[0]) * 50;
+  const afterWin = winChance(after.lines[0]) * 50;
+  const drop = bestWin - afterWin;
+  const uci = move.from + move.to + (move.promotion ?? "");
+  const isBest = uci === before.best;
+  if (isBest || drop <= 0.5) {
+    if (isSacrifice(move) && afterWin > 0) {
+      return "brilliant";
+    }
+    const second = before.lines[1];
+    if (isBest && second && bestWin - winChance(second) * 50 >= 15) {
+      return "great";
+    }
+    return "best";
+  }
+  if (drop < 2) return "excellent";
+  if (drop < 5) return "good";
+  if (drop < 10) return "inaccuracy";
+  if (drop < 20) return "mistake";
+  return "blunder";
+}
+
+function badge(square, verdict) {
+  const { mark: glyph, color } = VERDICTS[verdict];
+  mark([
+    {
+      orig: square,
+      customSvg: {
+        html: `<g transform="translate(80 20)"><circle r="17" fill="${color}" stroke="rgba(0,0,0,0.35)" stroke-width="1.5"/><text y="6" font-size="17" font-weight="700" font-family="Trebuchet MS, sans-serif" text-anchor="middle" fill="#fff">${glyph}</text></g>`,
+      },
+    },
+  ]);
+}
+
+function verdictText(verdict, after) {
+  const score = after?.lines[0] ? ` Eval ${formatScore(after.lines[0])}.` : "";
+  return `${VERDICTS[verdict].text}.${score}`;
+}
+
+/* Game flow */
 
 function build(level) {
   if (level <= built) {
@@ -244,10 +404,10 @@ function setStatus(text) {
 
 function updateControls() {
   const over = done === pairs.length;
-  ui.hint.hidden = over || wrong;
-  ui.show.hidden = over || wrong;
+  ui.hint.hidden = over || wrong || busy;
+  ui.show.hidden = over || wrong || busy;
   ui.back.hidden = !wrong;
-  ui.again.hidden = wrong;
+  ui.again.hidden = wrong || busy;
   ui.again.classList.toggle("primary", over);
   ui.again.classList.toggle("square", !over);
   ui.again.textContent = "";
@@ -258,57 +418,83 @@ function updateControls() {
   }
 }
 
-function advance(move) {
+async function advance(move, before) {
   const step = pairs[done];
   done += 1;
   hints = 0;
-  board.setShapes([]);
+  busy = true;
+  mark([]);
   soundFor(move, true);
   sync([move.from, move.to]);
   renderMoves();
-  const level = Math.round((done / pairs.length) * STEPS);
-  setEval(level);
-  build(level);
+  build(Math.round((done / pairs.length) * STEPS));
   updateControls();
-  if (done === pairs.length) {
-    setStatus("Checkmate. 1-0");
+  const over = done === pairs.length;
+  setStatus(over ? "Checkmate. 1-0" : "Reviewing…");
+
+  const after = await analysePosition();
+  const verdict = over ? (isSacrifice(move) ? "brilliant" : "best") : classify(before, after, move);
+  if (verdict) {
+    badge(move.to, verdict);
+    setStatus(over ? `${VERDICTS[verdict].text}. Checkmate, 1-0.` : verdictText(verdict, after));
+  } else if (!over) {
+    setStatus("White to move");
+  }
+  if (over) {
+    busy = false;
+    updateControls();
     return;
   }
-  setTimeout(() => {
-    const reply = chess.move(step.black);
-    soundFor(reply, false);
-    sync([reply.from, reply.to]);
-    renderMoves();
-    setStatus("White to move");
-  }, 450);
+
+  await wait(verdict ? 900 : 450);
+  const reply = chess.move(step.black);
+  soundFor(reply, false);
+  busy = false;
+  sync([reply.from, reply.to]);
+  renderMoves();
+  updateControls();
+  analysePosition();
 }
 
-function onMove(from, to) {
+async function onMove(from, to) {
+  const before = positionEval;
   const move = chess.move({ from, to, promotion: "q" });
   if (!move) {
     sync();
     return;
   }
   if (move.san === pairs[done].white || chess.isCheckmate()) {
-    advance(move);
+    advance(move, before);
     return;
   }
   wrong = true;
   play("illegal");
   sync([from, to]);
-  board.setShapes([{ orig: to, brush: "red" }]);
-  setStatus("Not the move.");
+  setStatus("Not the game move…");
   updateControls();
+  const after = await analysePosition();
+  if (!wrong) {
+    return;
+  }
+  const verdict = classify(before, after, move);
+  if (verdict) {
+    badge(to, verdict);
+    setStatus(`${verdictText(verdict, after)} Not the game move. Take it back.`);
+  } else {
+    mark([{ orig: to, brush: "red" }]);
+    setStatus("Not the game move. Take it back.");
+  }
 }
 
 function takeBack() {
   chess.undo();
   wrong = false;
-  board.setShapes([]);
+  mark([]);
   const last = chess.history({ verbose: true }).at(-1);
   sync(last ? [last.from, last.to] : undefined);
   setStatus("White to move");
   updateControls();
+  analysePosition();
 }
 
 function newGame(fromClick) {
@@ -322,16 +508,21 @@ function newGame(fromClick) {
   done = 0;
   hints = 0;
   wrong = false;
-  board.setShapes([]);
+  busy = false;
+  mark([]);
   sync();
   renderMoves();
-  setEval(0);
   ui.credit.textContent = `${game.credit}, from move ${game.from}.`;
   setStatus("White to move");
   updateControls();
+  analysePosition();
   if (fromClick) {
     play("game-start");
   }
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 ui.hint.addEventListener("click", () => {
@@ -342,11 +533,14 @@ ui.hint.addEventListener("click", () => {
     return;
   }
   const move = chess.moves({ verbose: true }).find((m) => m.san === step.white);
-  board.setShapes([{ orig: move.from, brush: "green" }]);
+  mark([{ orig: move.from, brush: "green" }]);
   setStatus(`${game.hints[done]} The piece is marked.`);
 });
 
-ui.show.addEventListener("click", () => advance(chess.move(pairs[done].white)));
+ui.show.addEventListener("click", () => {
+  const before = positionEval;
+  advance(chess.move(pairs[done].white), before);
+});
 ui.back.addEventListener("click", takeBack);
 ui.again.addEventListener("click", () => newGame(true));
 
@@ -360,6 +554,8 @@ ui.reveal.addEventListener("click", (event) => {
   event.preventDefault();
   build(STEPS);
 });
+
+/* Scroll hint */
 
 let hinted = false;
 
@@ -384,6 +580,8 @@ function hintScrollbar() {
   thumb();
   ui.hintBar.addEventListener("animationend", () => (ui.hintBar.hidden = true), { once: true });
 }
+
+/* Layout */
 
 const wide = matchMedia("(min-width: 721px)");
 let offset = 0;
@@ -434,11 +632,11 @@ window.addEventListener("resize", fit);
 
 function soundButton() {
   ui.soundIcon.setAttribute("href", soundOn ? "#i-speaker-high" : "#i-speaker-slash");
-  ui.sound.title = soundOn ? "Sound on" : "Sound off";
   ui.sound.setAttribute("aria-pressed", String(soundOn));
-  ui.sound.setAttribute("aria-label", soundOn ? "Sound on" : "Sound off");
+  ui.sound.title = soundOn ? "Sound on" : "Sound off";
 }
 
 soundButton();
 newGame(false);
 fit();
+startEngine();
