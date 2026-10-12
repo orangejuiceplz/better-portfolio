@@ -15,251 +15,203 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip" href="#opening">Skip to content</a>
+  <a class="skip" href="#site">Skip to content</a>
 
   <header class="top">
-    <a class="mark" href="#top" aria-label="Back to top"><span aria-hidden="true">&#9822;</span> Shiven Kishore</a>
-    <nav aria-label="Sections">
-      <a href="#opening">Opening</a>
-      <a href="#middlegame">Middlegame</a>
-      <a href="#endgame">Endgame</a>
-      <a href="#repertoire">Repertoire</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <a class="mark" href="#game"><span aria-hidden="true">&#9822;</span> Shiven Kishore</a>
+    <div class="tools">
+      <button id="sound" type="button" aria-pressed="true">Sound on</button>
+      <a id="reveal" href="#site">Reveal all</a>
+    </div>
   </header>
 
-  <main id="top">
-    <section id="game" class="hero" aria-labelledby="hero-title">
-      <div class="hero-text">
-        <p class="eyebrow">White to move</p>
-        <h1 id="hero-title">Shiven Kishore</h1>
-        <p class="lede">This portfolio is a chess game. Each section is locked behind a puzzle. Find the winning move on the board to open it.</p>
-        <p class="facts">Not a chess player? Every lock has a reveal link. Nothing here is hidden for good.</p>
-        <div class="panel" aria-labelledby="puzzle-title">
-          <ol id="progress" aria-label="Puzzle progress">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ol>
-          <h2 id="puzzle-title">Puzzle 1 of 4</h2>
-          <p id="puzzle-goal" class="goal"></p>
-          <p id="puzzle-unlocks" class="meta"></p>
-          <p id="puzzle-status" class="status" role="status" aria-live="polite"></p>
-          <div class="actions">
-            <button id="hint" class="button ghost" type="button">Hint</button>
-            <button id="next" class="button" type="button" hidden>Next puzzle</button>
-            <button id="skip" class="linkish" type="button">Reveal without solving</button>
-          </div>
+  <main>
+    <section id="game" class="stage" aria-label="Chess puzzle">
+      <div class="eval" role="img" aria-labelledby="eval-label">
+        <div class="eval-white"></div>
+        <span id="eval-label">0.0</span>
+      </div>
+      <div id="board" class="board" aria-label="Chessboard"></div>
+      <aside class="side">
+        <p id="status" class="status" role="status" aria-live="polite">White to move</p>
+        <div class="controls">
+          <button id="hint" type="button">Hint</button>
+          <button id="show" type="button">Show the move</button>
         </div>
-      </div>
-      <div id="board" class="board" aria-label="Chess puzzle board"></div>
+        <ol id="moves" class="moves" aria-label="Moves played"></ol>
+        <p class="credit">Morphy vs Duke Karl and Count Isouard, Paris 1858, from move 10.</p>
+      </aside>
     </section>
 
-    <section id="opening" class="section locked" data-puzzle data-name="Education" aria-labelledby="opening-title">
-      <div class="lock card">
-        <span class="glyph" aria-hidden="true">&#9823;</span>
-        <h2>Education</h2>
-        <p class="meta">Locked. Solve puzzle 1 on the board to reveal it.</p>
-        <p><a class="play" href="#game">Play puzzle 1</a> &middot; <a class="reveal" href="#opening">Reveal without solving</a></p>
-      </div>
-      <div class="content">
-      <header class="section-head">
-        <p class="eyebrow">1. The opening</p>
-        <h2 id="opening-title">Education</h2>
-        <p>Strong openings set up everything that follows.</p>
-      </header>
-      <article class="card">
-        <h3>Freehold High School</h3>
-        <p class="meta">Freehold, NJ &middot; Class of 2027</p>
-        <p class="stat"><span class="num">4.8</span> weighted GPA</p>
-        <h4>AP exams</h4>
-        <ul class="chips" aria-label="AP exam scores">
-          <li>Computer Science A <b>4</b></li>
-          <li>Computer Science Principles <b>4</b></li>
-          <li>Physics 1 <b>4</b></li>
-          <li>Calculus AB <b>4</b></li>
-          <li>U.S. History <b>4</b></li>
+    <div id="site" class="site">
+      <section class="intro" data-step="1" aria-label="Introduction">
+        <p class="eyebrow">White to move</p>
+        <h1>Shiven Kishore</h1>
+        <p class="lede">Student, builder, and founder from Howell, NJ.</p>
+        <p class="facts">Freehold High School &middot; Class of 2027</p>
+      </section>
+
+      <section id="opening" class="section" data-step="2" aria-labelledby="opening-title">
+        <header class="section-head">
+          <p class="eyebrow">1. The opening</p>
+          <h2 id="opening-title">Education</h2>
+        </header>
+        <article class="card">
+          <h3>Freehold High School</h3>
+          <p class="meta">Freehold, NJ &middot; Class of 2027</p>
+          <p class="stat"><span class="num">4.8</span> weighted GPA</p>
+          <h4>AP exams</h4>
+          <ul class="chips" aria-label="AP exam scores">
+            <li>Computer Science A <b>4</b></li>
+            <li>Computer Science Principles <b>4</b></li>
+            <li>Physics 1 <b>4</b></li>
+            <li>Calculus AB <b>4</b></li>
+            <li>U.S. History <b>4</b></li>
+          </ul>
+        </article>
+      </section>
+
+      <section id="middlegame" class="section" data-step="3" aria-labelledby="middlegame-title">
+        <header class="section-head">
+          <p class="eyebrow">2. The middlegame</p>
+          <h2 id="middlegame-title">Activities and leadership</h2>
+        </header>
+        <div class="grid">
+          <article class="card piece-card" data-step="3">
+            <span class="glyph" aria-hidden="true">&#9818;</span>
+            <h3>Founder and President, NibbleCode Inc.</h3>
+            <p class="meta">Nonprofit &middot; Grade 12 &middot; 8 hrs/wk</p>
+            <p>NibbleCode teaches younger kids the nuances of computing. Students choose a physical hardware path or a software creation path and learn how computers work from the ground up.</p>
+          </article>
+          <article class="card piece-card" data-step="4">
+            <span class="glyph" aria-hidden="true">&#9822;</span>
+            <h3>Programming Lead, FIRST Tech Challenge Robotics</h3>
+            <p class="meta">Grades 11 to 12 &middot; 5 hrs/wk</p>
+            <p>Leads the programming of the team's competition robot, from autonomous routines to driver controls. Mentors new programmers in Java so the team is ready for future seasons.</p>
+          </article>
+          <article class="card piece-card" data-step="5">
+            <span class="glyph" aria-hidden="true">&#9820;</span>
+            <h3>Sponsorship Outreach Officer, Technology Student Association</h3>
+            <p class="meta">Officer, Grades 11 to 12 &middot; Member, Grade 10 &middot; 4 hrs/wk</p>
+            <p>Builds relationships with local businesses and secured more than $2,000 in sponsorships for the chapter.</p>
+          </article>
+          <article class="card piece-card" data-step="5">
+            <span class="glyph" aria-hidden="true">&#9821;</span>
+            <h3>Challenge Writer, Cybersecurity Club (BoroCTF)</h3>
+            <p class="meta">Writer, Grade 12 &middot; Member, Grade 11 &middot; 3 hrs/wk</p>
+            <p>Writes challenges for BoroCTF, a capture-the-flag competition. Competed with the club and placed 15th out of more than 1,000 teams.</p>
+          </article>
+        </div>
+        <div data-step="5">
+          <h3 class="sub">Scoresheet</h3>
+          <ol class="scoresheet" aria-label="Timeline by grade">
+            <li>
+              <span class="move">10.</span>
+              <div>
+                <b>Grade 10</b>
+                <p>Joins the Technology Student Association. Starts volunteering at the Jackson Township Food Pantry and with NJ Clean Communities.</p>
+              </div>
+            </li>
+            <li>
+              <span class="move">11.</span>
+              <div>
+                <b>Grade 11</b>
+                <p>Becomes Programming Lead of the FTC robotics team and Sponsorship Outreach Officer for TSA. Joins the cybersecurity club.</p>
+              </div>
+            </li>
+            <li>
+              <span class="move">12.</span>
+              <div>
+                <b>Grade 12</b>
+                <p>Founds NibbleCode Inc. Writes challenges for BoroCTF. Earns the GitHub Foundations certification. Team wins the FTC Sustainability Award at the state level.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="endgame" class="section" data-step="6" aria-labelledby="endgame-title">
+        <header class="section-head">
+          <p class="eyebrow">3. The endgame</p>
+          <h2 id="endgame-title">Awards and service</h2>
+        </header>
+        <div class="grid">
+          <article class="card">
+            <h3>Awards and honors</h3>
+            <ul class="list">
+              <li>
+                <b>FTC Sustainability Award</b>
+                <span>Team award, FIRST Tech Challenge, 2026, state level</span>
+              </li>
+              <li>
+                <b>15th of 1,000+ teams</b>
+                <span>BoroCTF cybersecurity competition, 2026</span>
+              </li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Community service</h3>
+            <ul class="list">
+              <li>
+                <b>Volunteer, Jackson Township Food Pantry</b>
+                <span>Grades 10 to 12 &middot; 232 hours</span>
+              </li>
+              <li>
+                <b>Participant, NJ Clean Communities</b>
+                <span>Grades 10 to 12 &middot; 12 hours</span>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="repertoire" class="section" data-step="7" aria-labelledby="repertoire-title">
+        <header class="section-head">
+          <p class="eyebrow">4. The repertoire</p>
+          <h2 id="repertoire-title">Skills and certifications</h2>
+        </header>
+        <div class="grid three">
+          <article class="card">
+            <h3>Programming</h3>
+            <ul class="chips">
+              <li>Java</li>
+              <li>C</li>
+              <li>Assembly</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Languages</h3>
+            <ul class="chips">
+              <li>English</li>
+              <li>Spanish</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Certifications</h3>
+            <ul class="chips">
+              <li>GitHub Foundations <b>2026</b></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" class="section" data-step="8" aria-labelledby="contact-title">
+        <header class="section-head">
+          <p class="eyebrow">1-0</p>
+          <h2 id="contact-title">Contact</h2>
+        </header>
+        <ul class="contact">
+          <li><a href="mailto:shivenkishore@icloud.com">shivenkishore@icloud.com</a></li>
+          <li><a href="tel:+17329241752">(732) 924-1752</a></li>
+          <li><a href="https://github.com/orangejuiceplz" rel="me noopener">github.com/orangejuiceplz</a></li>
+          <li>Howell, NJ</li>
         </ul>
-      </article>
-      </div>
-    </section>
-
-    <section id="middlegame" class="section locked" data-puzzle data-name="Activities and leadership" aria-labelledby="middlegame-title">
-      <div class="lock card">
-        <span class="glyph" aria-hidden="true">&#9823;</span>
-        <h2>Activities and leadership</h2>
-        <p class="meta">Locked. Solve puzzle 2 on the board to reveal it.</p>
-        <p><a class="play" href="#game">Play puzzle 2</a> &middot; <a class="reveal" href="#middlegame">Reveal without solving</a></p>
-      </div>
-      <div class="content">
-      <header class="section-head">
-        <p class="eyebrow">2. The middlegame</p>
-        <h2 id="middlegame-title">Activities and leadership</h2>
-        <p>Every piece has a job. These are the ones Shiven moves most.</p>
-      </header>
-      <div class="grid">
-        <article class="card piece-card">
-          <span class="glyph" aria-hidden="true">&#9818;</span>
-          <h3>Founder and President, NibbleCode Inc.</h3>
-          <p class="meta">Nonprofit &middot; Grade 12 &middot; 8 hrs/wk</p>
-          <p>NibbleCode teaches younger kids the nuances of computing. Students choose a physical hardware path or a software creation path and learn how computers work from the ground up.</p>
-        </article>
-        <article class="card piece-card">
-          <span class="glyph" aria-hidden="true">&#9822;</span>
-          <h3>Programming Lead, FIRST Tech Challenge Robotics</h3>
-          <p class="meta">Grades 11 to 12 &middot; 5 hrs/wk</p>
-          <p>Leads the programming of the team's competition robot, from autonomous routines to driver controls. Mentors new programmers in Java so the team is ready for future seasons.</p>
-        </article>
-        <article class="card piece-card">
-          <span class="glyph" aria-hidden="true">&#9820;</span>
-          <h3>Sponsorship Outreach Officer, Technology Student Association</h3>
-          <p class="meta">Officer, Grades 11 to 12 &middot; Member, Grade 10 &middot; 4 hrs/wk</p>
-          <p>Builds relationships with local businesses and secured more than $2,000 in sponsorships for the chapter.</p>
-        </article>
-        <article class="card piece-card">
-          <span class="glyph" aria-hidden="true">&#9821;</span>
-          <h3>Challenge Writer, Cybersecurity Club (BoroCTF)</h3>
-          <p class="meta">Writer, Grade 12 &middot; Member, Grade 11 &middot; 3 hrs/wk</p>
-          <p>Writes challenges for BoroCTF, a capture-the-flag competition. Competed with the club and placed 15th out of more than 1,000 teams.</p>
-        </article>
-      </div>
-
-      <h3 class="sub">Scoresheet</h3>
-      <ol class="scoresheet" aria-label="Timeline by grade">
-        <li>
-          <span class="move">10.</span>
-          <div>
-            <b>Grade 10</b>
-            <p>Joins the Technology Student Association. Starts volunteering at the Jackson Township Food Pantry and with NJ Clean Communities.</p>
-          </div>
-        </li>
-        <li>
-          <span class="move">11.</span>
-          <div>
-            <b>Grade 11</b>
-            <p>Becomes Programming Lead of the FTC robotics team and Sponsorship Outreach Officer for TSA. Joins the cybersecurity club.</p>
-          </div>
-        </li>
-        <li>
-          <span class="move">12.</span>
-          <div>
-            <b>Grade 12</b>
-            <p>Founds NibbleCode Inc. Writes challenges for BoroCTF. Earns the GitHub Foundations certification. Team wins the FTC Sustainability Award at the state level.</p>
-          </div>
-        </li>
-      </ol>
-      </div>
-    </section>
-
-    <section id="endgame" class="section locked" data-puzzle data-name="Awards and service" aria-labelledby="endgame-title">
-      <div class="lock card">
-        <span class="glyph" aria-hidden="true">&#9823;</span>
-        <h2>Awards and service</h2>
-        <p class="meta">Locked. Solve puzzle 3 on the board to reveal it.</p>
-        <p><a class="play" href="#game">Play puzzle 3</a> &middot; <a class="reveal" href="#endgame">Reveal without solving</a></p>
-      </div>
-      <div class="content">
-      <header class="section-head">
-        <p class="eyebrow">3. The endgame</p>
-        <h2 id="endgame-title">Awards and service</h2>
-        <p>Results on the board, and time given back off it.</p>
-      </header>
-      <div class="grid two">
-        <article class="card">
-          <h3>Awards and honors</h3>
-          <ul class="list">
-            <li>
-              <b>FTC Sustainability Award</b>
-              <span>Team award, FIRST Tech Challenge, 2026, state level</span>
-            </li>
-            <li>
-              <b>15th of 1,000+ teams</b>
-              <span>BoroCTF cybersecurity competition, 2026</span>
-            </li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>Community service</h3>
-          <ul class="list">
-            <li>
-              <b>Volunteer, Jackson Township Food Pantry</b>
-              <span>Grades 10 to 12 &middot; 232 hours</span>
-            </li>
-            <li>
-              <b>Participant, NJ Clean Communities</b>
-              <span>Grades 10 to 12 &middot; 12 hours</span>
-            </li>
-          </ul>
-        </article>
-      </div>
-      </div>
-    </section>
-
-    <section id="repertoire" class="section locked" data-puzzle data-name="Skills and certifications" aria-labelledby="repertoire-title">
-      <div class="lock card">
-        <span class="glyph" aria-hidden="true">&#9823;</span>
-        <h2>Skills and certifications</h2>
-        <p class="meta">Locked. Solve puzzle 4 on the board to reveal it.</p>
-        <p><a class="play" href="#game">Play puzzle 4</a> &middot; <a class="reveal" href="#repertoire">Reveal without solving</a></p>
-      </div>
-      <div class="content">
-      <header class="section-head">
-        <p class="eyebrow">4. The repertoire</p>
-        <h2 id="repertoire-title">Skills and certifications</h2>
-        <p>The lines Shiven knows well.</p>
-      </header>
-      <div class="grid three">
-        <article class="card">
-          <h3>Programming</h3>
-          <ul class="chips">
-            <li>Java</li>
-            <li>C</li>
-            <li>Assembly</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>Languages</h3>
-          <ul class="chips">
-            <li>English</li>
-            <li>Spanish</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3>Certifications</h3>
-          <ul class="chips">
-            <li>GitHub Foundations <b>2026</b></li>
-          </ul>
-        </article>
-      </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section locked" data-finale aria-labelledby="contact-title">
-      <div class="lock card">
-        <span class="glyph" aria-hidden="true">&#9818;</span>
-        <h2>Checkmate</h2>
-        <p class="meta">Solve all four puzzles to open the last section.</p>
-        <p><a class="reveal" href="#contact">Reveal without solving</a></p>
-      </div>
-      <div class="content">
-      <header class="section-head">
-        <p class="eyebrow">Your move</p>
-        <h2 id="contact-title">Contact</h2>
-        <p>Open to internships, collaborations, and conversations about teaching kids to code.</p>
-      </header>
-      <ul class="contact">
-        <li><a href="mailto:shivenkishore@icloud.com">shivenkishore@icloud.com</a></li>
-        <li><a href="tel:+17329241752">(732) 924-1752</a></li>
-        <li><a href="https://github.com/orangejuiceplz" rel="me noopener">github.com/orangejuiceplz</a></li>
-        <li>Howell, NJ</li>
-      </ul>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <footer class="foot">
-    <p>Shiven Kishore &middot; Board by <a href="https://github.com/lichess-org/chessground" rel="noopener">chessground</a>, the lichess board. Rules by <a href="https://github.com/jhlywa/chess.js" rel="noopener">chess.js</a>. <a id="reset" href="#game">Start over</a></p>
+    <p>Board by <a href="https://github.com/lichess-org/chessground" rel="noopener">chessground</a>. Rules by <a href="https://github.com/jhlywa/chess.js" rel="noopener">chess.js</a>. Sounds from <a href="https://github.com/lichess-org/lila/tree/master/public/sound/sfx" rel="noopener">lichess</a>. <a id="reset" href="#game">Start over</a></p>
   </footer>
 
   <script type="module" src="app.js"></script>

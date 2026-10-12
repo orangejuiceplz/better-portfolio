@@ -1,8 +1,8 @@
 # Shiven Kishore, portfolio
 
-A portfolio you play. Each section is locked behind a chess puzzle. Solve it on the board to open the section, or use the reveal link if chess is not your thing.
+A portfolio that starts as a chessboard. The position is the Opera Game (Morphy vs Duke Karl and Count Isouard, Paris 1858) from move 10. Find each of White's moves and the page builds itself one piece at a time, while the evaluation bar beside the board climbs toward 1-0. Stuck? There is a hint, a "show the move" button, and a "reveal all" link in the header.
 
-The board is [chessground](https://github.com/lichess-org/chessground), the board lichess uses. Move legality and checkmate detection come from [chess.js](https://github.com/jhlywa/chess.js). Both are vendored under `vendor/` with their licenses. Everything else is plain HTML, CSS, and one small JavaScript module. No build step, no network calls at runtime.
+The board is [chessground](https://github.com/lichess-org/chessground), the board lichess uses. Rules and checkmate detection come from [chess.js](https://github.com/jhlywa/chess.js). The move, capture, check and victory sounds are the "sfx" sound set from lichess. Everything is vendored under `vendor/`, so the site makes no network calls at runtime and has no build step.
 
 ## Run it locally
 
@@ -20,18 +20,21 @@ The site is static, so GitHub Pages works as is. In the repository settings, und
 
 ## Edit the content
 
-Text lives in `index.html`. Sections follow a game of chess:
+Text lives in `index.html`. Each block carries a `data-step` from 1 to 8 that says which move reveals it:
 
-- Opening: education
-- Middlegame: activities, leadership, and a grade-by-grade scoresheet
-- Endgame: awards and community service
-- Repertoire: skills and certifications
-- Checkmate: contact, opened when all four puzzles are solved
+1. Name and tagline
+2. Education
+3. NibbleCode
+4. FTC robotics
+5. TSA, BoroCTF and the scoresheet
+6. Awards and service
+7. Skills and certifications
+8. Contact
 
-Puzzles live at the top of `app.js` as a FEN, the goal text, the winning line in standard notation, and a hint. The game accepts any checkmating move, and for longer puzzles it plays Black's reply from the line. Progress is saved in the browser, and the footer has a link to start over.
+The moves, hints and evaluation labels live in the `steps` array at the top of `app.js`. The eval numbers are a progress scale that follows the shape of the game, not engine output. Progress and the sound setting are saved in the browser. The footer has a link to start over.
 
 Colors and fonts are the variables at the top of `styles.css`.
 
-## Licenses
+## License
 
-chessground is GPL-3.0-or-later and chess.js is BSD-2-Clause. See `vendor/VERSIONS.txt` and the LICENSE files next to each library.
+The site's own code is GPL-3.0-or-later (see `LICENSE`). chessground is GPL-3.0-or-later, chess.js is BSD-2-Clause, and the lichess sounds are AGPL-3.0-or-later by Enigmahack. See `vendor/VERSIONS.txt` and the license files next to each component.
