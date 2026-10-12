@@ -25,24 +25,7 @@
     </div>
   </header>
 
-  <main>
-    <section id="game" class="stage" aria-label="Chess puzzle">
-      <div class="eval" role="img" aria-labelledby="eval-label">
-        <div class="eval-white"></div>
-        <span id="eval-label">0.0</span>
-      </div>
-      <div id="board" class="board" aria-label="Chessboard"></div>
-      <aside class="side">
-        <p id="status" class="status" role="status" aria-live="polite">White to move</p>
-        <div class="controls">
-          <button id="hint" type="button">Hint</button>
-          <button id="show" type="button">Show the move</button>
-        </div>
-        <ol id="moves" class="moves" aria-label="Moves played"></ol>
-        <p class="credit">Morphy vs Duke Karl and Count Isouard, Paris 1858, from move 10.</p>
-      </aside>
-    </section>
-
+  <main class="layout">
     <div id="site" class="site">
       <section class="intro" data-step="1" aria-label="Introduction">
         <p class="eyebrow">White to move</p>
@@ -207,12 +190,35 @@
           <li>Howell, NJ</li>
         </ul>
       </section>
+      <footer class="foot">
+        <p>Board by <a href="https://github.com/lichess-org/chessground" rel="noopener">chessground</a>. Rules by <a href="https://github.com/jhlywa/chess.js" rel="noopener">chess.js</a>. Sounds by chess.com.</p>
+      </footer>
     </div>
+
+    <aside id="game" class="stage" aria-label="Chess puzzle">
+      <div class="game">
+        <div class="boardrow">
+          <div class="eval" role="img" aria-labelledby="eval-label">
+            <div class="eval-white"></div>
+            <span id="eval-label">0.0</span>
+          </div>
+          <div id="board" class="board" aria-label="Chessboard"></div>
+        </div>
+        <div class="side">
+          <p id="status" class="status" role="status" aria-live="polite">White to move</p>
+          <div class="controls">
+            <button id="hint" type="button">Hint</button>
+            <button id="show" type="button">Show the move</button>
+            <button id="back" type="button" class="warn" hidden>Take back</button>
+            <button id="again" type="button">New game</button>
+          </div>
+          <ol id="moves" class="moves" aria-label="Moves played"></ol>
+          <p id="credit" class="credit"></p>
+        </div>
+      </div>
+    </aside>
   </main>
 
-  <footer class="foot">
-    <p>Board by <a href="https://github.com/lichess-org/chessground" rel="noopener">chessground</a>. Rules by <a href="https://github.com/jhlywa/chess.js" rel="noopener">chess.js</a>. Sounds from <a href="https://github.com/lichess-org/lila/tree/master/public/sound/sfx" rel="noopener">lichess</a>. <a id="reset" href="#game">Start over</a></p>
-  </footer>
 
   <script type="module" src="app.js"></script>
 </body>

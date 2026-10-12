@@ -1,8 +1,10 @@
 # Shiven Kishore, portfolio
 
-A portfolio that starts as a chessboard. The position is the Opera Game (Morphy vs Duke Karl and Count Isouard, Paris 1858) from move 10. Find each of White's moves and the page builds itself one piece at a time, while the evaluation bar beside the board climbs toward 1-0. Stuck? There is a hint, a "show the move" button, and a "reveal all" link in the header.
+A portfolio that starts as a chessboard. Every load picks one of five famous miniatures at random (the Opera Game, the Immortal Game, the Evergreen Game, Lasker vs Thomas, Réti vs Tartakower) and drops you in at the decisive moment. Find each of White's moves and the page builds itself beside the board, one piece at a time, while the evaluation bar climbs toward 1-0. A wrong move stays on the board, marked, until you take it back, the way lichess puzzles work. Stuck? There is a hint, a "show the move" button, and a "reveal all" link in the header. "New game" deals another game.
 
-The board is [chessground](https://github.com/lichess-org/chessground), the board lichess uses. Rules and checkmate detection come from [chess.js](https://github.com/jhlywa/chess.js). The move, capture, check and victory sounds are the "sfx" sound set from lichess. Everything is vendored under `vendor/`, so the site makes no network calls at runtime and has no build step.
+On wide screens the board starts centered, then slides to the right and stays put while the portfolio scrolls on the left. Scroll back to the top and it returns to the middle.
+
+The board is [chessground](https://github.com/lichess-org/chessground), the board lichess uses. Rules and checkmate detection come from [chess.js](https://github.com/jhlywa/chess.js). Sounds are chess.com's default set (game start, move, capture, castle, check, promote, game end, illegal, notify), loaded from chess.com's CDN at runtime. If those cannot load, the move, capture, check and game end sounds fall back to the AGPL "sfx" set from lichess, vendored under `vendor/sounds`.
 
 ## Run it locally
 
@@ -20,7 +22,7 @@ The site is static, so GitHub Pages works as is. In the repository settings, und
 
 ## Edit the content
 
-Text lives in `index.html`. Each block carries a `data-step` from 1 to 8 that says which move reveals it:
+Text lives in `index.html`. Each block carries a `data-step` from 1 to 8 that says when it appears. Games with fewer than eight moves reveal more than one block per move.
 
 1. Name and tagline
 2. Education
@@ -31,10 +33,10 @@ Text lives in `index.html`. Each block carries a `data-step` from 1 to 8 that sa
 7. Skills and certifications
 8. Contact
 
-The moves, hints and evaluation labels live in the `steps` array at the top of `app.js`. The eval numbers are a progress scale that follows the shape of the game, not engine output. Progress and the sound setting are saved in the browser. The footer has a link to start over.
+The games live in the `games` array at the top of `app.js`: a credit line, the move number the puzzle starts at, the FEN, White's line with Black's replies, and one hint per White move. Every line was checked with chess.js to be legal and to end in checkmate. The eval numbers are a progress scale that follows the shape of the game, not engine output. The sound setting is saved in the browser; progress is not, so each visit is a fresh game.
 
 Colors and fonts are the variables at the top of `styles.css`.
 
 ## License
 
-The site's own code is GPL-3.0-or-later (see `LICENSE`). chessground is GPL-3.0-or-later, chess.js is BSD-2-Clause, and the lichess sounds are AGPL-3.0-or-later by Enigmahack. See `vendor/VERSIONS.txt` and the license files next to each component.
+The site's own code is GPL-3.0-or-later (see `LICENSE`). chessground is GPL-3.0-or-later, chess.js is BSD-2-Clause, and the fallback sounds are AGPL-3.0-or-later by Enigmahack. See `vendor/VERSIONS.txt` and the license files next to each component. The chess.com sounds are not included in this repository; they are played from chess.com's own servers.
