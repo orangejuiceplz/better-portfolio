@@ -1,6 +1,6 @@
 # Shiven Kishore, portfolio
 
-A portfolio that starts as a chessboard. Every load picks one of five famous miniatures at random (the Opera Game, the Immortal Game, the Evergreen Game, Lasker vs Thomas, Réti vs Tartakower) and drops you in at the decisive moment. Find each of White's moves and the page builds itself beside the board, one piece at a time, while the evaluation bar climbs toward 1-0. A wrong move stays on the board, marked, until you take it back, the way lichess puzzles work. Stuck? There is a hint, a "show the move" button, and a "reveal all" link in the header. "New game" deals another game.
+A portfolio that starts as a chessboard. Every load picks one of five famous miniatures at random (the Opera Game, the Immortal Game, the Evergreen Game, Lasker vs Thomas, Réti vs Tartakower) and drops you in at the decisive moment. Find each of White's moves and the page builds itself beside the board, one piece at a time, while the evaluation bar climbs toward 1-0. A wrong move stays on the board, marked, until you take it back, the way lichess puzzles work. Stuck? There is a hint, a "play best move" button, and a "reveal all" link in the header. "New game" deals another game.
 
 The board starts centered. After the first move the page scrolls to the first block and the board slides to the right, where it stays pinned while the portfolio scrolls on the left. Scroll back to the top and the board returns to the center. Each correct move scrolls the page to the block it just revealed. The evaluation bar sits beside the board. The browser scrollbar is hidden; a thin gold scrollbar blinks for a couple of seconds the first time the page becomes scrollable and then stays out of the way. The board is sized from the window height and width at load and on resize, so browser zoom keeps everything on screen; below 720 CSS pixels of width the page becomes a single column with the board on top.
 
@@ -8,7 +8,7 @@ The board is [chessground](https://github.com/lichess-org/chessground), the boar
 
 ## Hard mode: play Stockfish
 
-Under the move list, "Play Stockfish instead" starts a game from the opening position with you as White. Pick a level from 100 to 3000. The lower levels mix random moves with a shallow, handicapped search; 1600 and 2000 use Stockfish's skill level setting; 3000 is the engine at full strength with one second a move. The portfolio unlocks as your winning chances grow: each tenth of win probability above even opens the next block, and checkmate opens everything. Hint marks the engine's suggestion, Show the move plays it, Take back undoes your last move and the reply. The levels are approximate, not calibrated ratings.
+Under the move list, "Play Stockfish instead" starts a game from the opening position with you as White. Pick a level from 100 to 3000. The lower levels mix random moves with a shallow, handicapped search; 1600 and 2000 use Stockfish's skill level setting; 3000 is the engine at full strength with one second a move. The portfolio unlocks as your winning chances grow: each tenth of win probability above even opens the next block, and checkmate opens everything. Hint marks the engine's suggestion, Play best move plays it, Take back undoes your last move and the reply. The levels are approximate, not calibrated ratings.
 
 ## Run it locally
 

@@ -820,15 +820,17 @@ function hintScrollbar() {
 const wide = matchMedia("(min-width: 721px)");
 let offset = 0;
 
-const beside = matchMedia("(min-width: 1101px)");
+const beside = matchMedia("(min-width: 1280px)");
 
 function fit() {
   const root = document.documentElement.style;
   if (!wide.matches) {
     root.removeProperty("--board");
   } else if (beside.matches) {
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
     const spare = innerHeight - ui.top.offsetHeight - 64;
-    const size = Math.max(260, Math.min(innerWidth * 0.3, spare, 480));
+    const room = innerWidth - 5 * rem - 30 * rem - 3 * rem - 3 * rem - 15.5 * rem;
+    const size = Math.max(300, Math.min(innerWidth * 0.3, spare, room, 440));
     root.setProperty("--board", `${Math.round(size)}px`);
   } else {
     const spare = innerHeight - ui.top.offsetHeight - ui.side.offsetHeight - 48;
