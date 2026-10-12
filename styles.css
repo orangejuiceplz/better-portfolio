@@ -1,17 +1,17 @@
 :root {
-  --bg: #161512;
-  --surface: #262421;
-  --surface-2: #302e2b;
-  --line: #3d3a36;
-  --ink: #e6e3df;
-  --ink-soft: #a8a39d;
-  --blue: #3692e7;
-  --blue-dark: #1f6bb5;
-  --blue-edge: #184f87;
-  --red: #cc3b3b;
-  --red-edge: #7d1f1f;
-  --key: #3a3733;
-  --key-edge: #1a1816;
+  --bg: #1a1f24;
+  --surface: #232a31;
+  --surface-2: #2c353e;
+  --line: #34404a;
+  --ink: #e4e9ec;
+  --ink-soft: #9db0bc;
+  --blue: #5b9bd0;
+  --blue-dark: #3f7fb3;
+  --blue-edge: #27567d;
+  --red: #c74b4b;
+  --red-edge: #7a2626;
+  --key: #35404a;
+  --key-edge: #1b2127;
   --light-sq: #dee3e6;
   --dark-sq: #8ca2ad;
   --font: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif;
@@ -149,7 +149,7 @@ button {
 
 .btn.primary {
   flex: 1;
-  background: linear-gradient(180deg, #4ea0ee, var(--blue) 40%, var(--blue-dark));
+  background: linear-gradient(180deg, #72adda, var(--blue) 40%, var(--blue-dark));
   box-shadow: 0 4px 0 var(--blue-edge);
 }
 
@@ -158,7 +158,7 @@ button {
 }
 
 .btn.danger {
-  background: linear-gradient(180deg, #e04a4a, var(--red) 40%, #a52e2e);
+  background: linear-gradient(180deg, #d96060, var(--red) 40%, #a33636);
   box-shadow: 0 4px 0 var(--red-edge);
 }
 
@@ -287,7 +287,7 @@ main {
   width: var(--board);
   height: var(--board);
   border-radius: 4px;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 50px rgba(5, 10, 16, 0.55);
 }
 
 .board cg-board {
@@ -303,14 +303,14 @@ main {
   position: relative;
   border-radius: 4px;
   overflow: hidden;
-  background: #403d39;
+  background: #3a4651;
 }
 
 .eval-white {
   position: absolute;
   inset: auto 0 0;
   height: var(--white);
-  background: #f0f0f0;
+  background: var(--light-sq);
   transition: height 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -322,7 +322,7 @@ main {
   text-align: center;
   font-size: 0.6rem;
   font-weight: 700;
-  color: #222;
+  color: #1f2a33;
 }
 
 .scrollhint {

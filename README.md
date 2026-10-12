@@ -35,7 +35,7 @@ Text lives in `index.html`. Each block carries a `data-step` from 1 to 8 that sa
 
 The games live in the `games` array at the top of `app.js`: a credit line, the move number the puzzle starts at, the FEN, White's line with Black's replies, and one hint per White move. Every line was checked with chess.js to be legal and to end in checkmate. The eval numbers are a progress scale that follows the shape of the game, not engine output. The sound setting is saved in the browser; progress is not, so each visit is a fresh game.
 
-The look is lichess dark with blue accents and chess.com style buttons, set in Trebuchet MS. Colors are the variables at the top of `styles.css`; swap `--blue` and the two button edge colors to change the accent. Credits for the games, libraries, icons and sounds are on the `credits/` page.
+The palette is built from the lichess blue board: dark slate background, slate surfaces and a steel blue accent, with chess.com style buttons, set in Trebuchet MS. Colors are the variables at the top of `styles.css`; swap `--blue` and the two button edge colors to change the accent. Credits for the games, libraries, icons and sounds are on the `credits/` page.
 
 ## License
 
