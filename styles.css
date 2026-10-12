@@ -176,14 +176,18 @@ main {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--game-w);
+  grid-template-columns: var(--game-w) minmax(0, 1fr);
   gap: clamp(1.5rem, 4vw, 4rem);
   align-items: start;
 }
 
 .site {
   min-width: 0;
-  padding: clamp(1.5rem, 5vh, 3rem) 0 3rem;
+  padding: calc(100vh - var(--top)) 0 3rem;
+}
+
+.site:not(:has(.built)) {
+  padding-top: 0;
 }
 
 .site:has(.built) {
@@ -202,6 +206,7 @@ main {
 .game {
   display: grid;
   gap: 1rem;
+  will-change: transform;
 }
 
 .board {
@@ -528,12 +533,13 @@ main {
 
   .layout {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 
   .site {
     width: 100%;
     min-height: 0;
+    padding-top: 0;
   }
 
   .site:has(.built) {

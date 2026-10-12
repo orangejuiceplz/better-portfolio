@@ -102,6 +102,8 @@ const ui = {
   sound: document.getElementById("sound"),
   soundIcon: document.getElementById("sound-icon"),
   reveal: document.getElementById("reveal"),
+  layout: document.querySelector(".layout"),
+  game: document.querySelector(".game"),
   content: document.getElementById("site"),
   steps: [...document.querySelectorAll("[data-step]")],
 };
@@ -377,17 +379,39 @@ ui.evalBar.addEventListener("pointermove", (event) => dragging && scrollFromPoin
 ui.evalBar.addEventListener("pointerup", () => (dragging = false));
 ui.evalBar.addEventListener("pointercancel", () => (dragging = false));
 
+const wide = matchMedia("(min-width: 901px)");
+let offset = 0;
+
+function measure() {
+  ui.game.style.transform = "none";
+  const layout = ui.layout.getBoundingClientRect();
+  const rect = ui.game.getBoundingClientRect();
+  offset = layout.left + layout.width / 2 - (rect.left + rect.width / 2);
+  slide();
+  thumb();
+}
+
+function slide() {
+  if (!wide.matches) {
+    ui.game.style.transform = "none";
+    return;
+  }
+  const progress = Math.min(1, Math.max(0, scrollY / (innerHeight * 0.6)));
+  ui.game.style.transform = `translateX(${offset * (1 - progress)}px)`;
+}
+
 let ticking = false;
 window.addEventListener("scroll", () => {
   if (!ticking) {
     ticking = true;
     requestAnimationFrame(() => {
+      slide();
       thumb();
       ticking = false;
     });
   }
 });
-window.addEventListener("resize", thumb);
+window.addEventListener("resize", measure);
 
 function soundButton() {
   ui.soundIcon.setAttribute("href", soundOn ? "#i-speaker-high" : "#i-speaker-slash");
@@ -397,4 +421,4 @@ function soundButton() {
 
 soundButton();
 newGame(false);
-thumb();
+measure();
