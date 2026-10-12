@@ -97,8 +97,11 @@ const ui = {
   moves: document.getElementById("moves"),
   credit: document.getElementById("credit"),
   evalBar: document.getElementById("eval"),
-  evalThumb: document.querySelector(".eval-thumb"),
   evalLabel: document.getElementById("eval-label"),
+  hintBar: document.getElementById("scrollhint"),
+  hintThumb: document.querySelector(".scrollhint-thumb"),
+  top: document.querySelector(".top"),
+  side: document.querySelector(".side"),
   sound: document.getElementById("sound"),
   soundIcon: document.getElementById("sound-icon"),
   reveal: document.getElementById("reveal"),
@@ -229,7 +232,9 @@ function build(level) {
   }
   setTimeout(() => {
     target?.scrollIntoView({ behavior: "smooth", block: "start" });
-    thumb();
+    if (first) {
+      setTimeout(hintScrollbar, 600);
+    }
   }, 350);
 }
 
@@ -347,40 +352,45 @@ ui.reveal.addEventListener("click", (event) => {
   build(STEPS);
 });
 
+let hinted = false;
+
 function thumb() {
-  const doc = document.documentElement;
-  const range = doc.scrollHeight - innerHeight;
-  const bar = ui.evalBar.clientHeight;
-  if (range <= 0) {
-    ui.evalThumb.hidden = true;
+  if (ui.hintBar.hidden) {
     return;
   }
-  ui.evalThumb.hidden = false;
-  const height = Math.max(28, (innerHeight / doc.scrollHeight) * bar);
-  const top = (scrollY / range) * (bar - height);
-  ui.evalThumb.style.height = `${height}px`;
-  ui.evalThumb.style.top = `${top}px`;
-}
-
-function scrollFromPointer(event) {
-  const rect = ui.evalBar.getBoundingClientRect();
   const doc = document.documentElement;
-  const fraction = (event.clientY - rect.top) / rect.height;
-  scrollTo({ top: fraction * (doc.scrollHeight - innerHeight), behavior: "auto" });
+  const range = doc.scrollHeight - innerHeight;
+  const bar = ui.hintBar.clientHeight;
+  const height = Math.max(28, (innerHeight / doc.scrollHeight) * bar);
+  ui.hintThumb.style.height = `${height}px`;
+  ui.hintThumb.style.top = `${range > 0 ? (scrollY / range) * (bar - height) : 0}px`;
 }
 
-let dragging = false;
-ui.evalBar.addEventListener("pointerdown", (event) => {
-  dragging = true;
-  ui.evalBar.setPointerCapture(event.pointerId);
-  scrollFromPointer(event);
-});
-ui.evalBar.addEventListener("pointermove", (event) => dragging && scrollFromPointer(event));
-ui.evalBar.addEventListener("pointerup", () => (dragging = false));
-ui.evalBar.addEventListener("pointercancel", () => (dragging = false));
+function hintScrollbar() {
+  if (hinted) {
+    return;
+  }
+  hinted = true;
+  ui.hintBar.hidden = false;
+  thumb();
+  ui.hintBar.addEventListener("animationend", () => (ui.hintBar.hidden = true), { once: true });
+}
 
-const wide = matchMedia("(min-width: 901px)");
+const wide = matchMedia("(min-width: 721px)");
 let offset = 0;
+
+function fit() {
+  const root = document.documentElement.style;
+  if (!wide.matches) {
+    root.removeProperty("--board");
+  } else {
+    const spare = innerHeight - ui.top.offsetHeight - ui.side.offsetHeight - 48;
+    const size = Math.max(220, Math.min(innerWidth * 0.38, spare, 480));
+    root.setProperty("--board", `${Math.round(size)}px`);
+  }
+  board.redrawAll();
+  measure();
+}
 
 function measure() {
   ui.game.style.transform = "none";
@@ -411,7 +421,7 @@ window.addEventListener("scroll", () => {
     });
   }
 });
-window.addEventListener("resize", measure);
+window.addEventListener("resize", fit);
 
 function soundButton() {
   ui.soundIcon.setAttribute("href", soundOn ? "#i-speaker-high" : "#i-speaker-slash");
@@ -421,4 +431,4 @@ function soundButton() {
 
 soundButton();
 newGame(false);
-measure();
+fit();

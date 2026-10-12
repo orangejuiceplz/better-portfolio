@@ -49,23 +49,6 @@
   </header>
 
   <main class="layout">
-    <aside id="game" class="stage" aria-label="Chess puzzle">
-      <div class="game">
-        <div id="board" class="board" aria-label="Chessboard"></div>
-        <div class="side">
-          <p id="status" class="status" role="status" aria-live="polite">White to move</p>
-          <div class="controls">
-            <button id="hint" type="button"><svg class="icon" aria-hidden="true"><use href="#i-lightbulb"/></svg> Hint</button>
-            <button id="show" type="button"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg> Show the move</button>
-            <button id="back" type="button" class="warn" hidden><svg class="icon" aria-hidden="true"><use href="#i-arrow-counter-clockwise"/></svg> Take back</button>
-            <button id="again" type="button"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg> New game</button>
-          </div>
-          <ol id="moves" class="moves" aria-label="Moves played"></ol>
-          <p id="credit" class="credit"></p>
-        </div>
-      </div>
-    </aside>
-
     <div id="site" class="site">
       <section class="intro" data-step="1" aria-label="Introduction">
         <p class="eyebrow">White to move</p>
@@ -238,13 +221,31 @@
       </section>
     </div>
 
+    <aside id="game" class="stage" aria-label="Chess puzzle">
+      <div class="game">
+        <div class="boardrow">
+          <div id="eval" class="eval" role="img" aria-labelledby="eval-label">
+            <div class="eval-white"></div>
+            <span id="eval-label">0.0</span>
+          </div>
+          <div id="board" class="board" aria-label="Chessboard"></div>
+        </div>
+        <div class="side">
+          <p id="status" class="status" role="status" aria-live="polite">White to move</p>
+          <div class="controls">
+            <button id="hint" type="button"><svg class="icon" aria-hidden="true"><use href="#i-lightbulb"/></svg> Hint</button>
+            <button id="show" type="button"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg> Show the move</button>
+            <button id="back" type="button" class="warn" hidden><svg class="icon" aria-hidden="true"><use href="#i-arrow-counter-clockwise"/></svg> Take back</button>
+            <button id="again" type="button"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg> New game</button>
+          </div>
+          <ol id="moves" class="moves" aria-label="Moves played"></ol>
+          <p id="credit" class="credit"></p>
+        </div>
+      </div>
+    </aside>
   </main>
 
-  <div id="eval" class="eval" role="img" aria-labelledby="eval-label">
-    <div class="eval-white"></div>
-    <div class="eval-thumb" aria-hidden="true"></div>
-    <span id="eval-label">0.0</span>
-  </div>
+  <div id="scrollhint" class="scrollhint" aria-hidden="true" hidden><div class="scrollhint-thumb"></div></div>
 
   <script type="module" src="app.js"></script>
 </body>

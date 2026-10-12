@@ -12,8 +12,7 @@
   --measure: 78rem;
   --top: 3.8rem;
   --board: min(38vw, 62vh, 30rem);
-  --game-w: var(--board);
-  --rail: 18px;
+  --game-w: calc(var(--board) + 2.35rem);
 }
 
 html {
@@ -167,16 +166,12 @@ button {
 main {
   max-width: var(--measure);
   margin: 0 auto;
-  padding: 0 calc(clamp(1rem, 4vw, 2.5rem) + var(--rail)) 0 clamp(1rem, 4vw, 2.5rem);
-}
-
-.top {
-  padding-right: calc(clamp(1rem, 4vw, 2.5rem) + var(--rail));
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
 }
 
 .layout {
   display: grid;
-  grid-template-columns: var(--game-w) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) var(--game-w);
   gap: clamp(1.5rem, 4vw, 4rem);
   align-items: start;
 }
@@ -209,6 +204,13 @@ main {
   will-change: transform;
 }
 
+.boardrow {
+  display: grid;
+  grid-template-columns: 1.6rem var(--board);
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
 .board {
   width: var(--board);
   height: var(--board);
@@ -218,16 +220,11 @@ main {
 
 .eval {
   --white: 50%;
-  position: fixed;
-  top: var(--top);
-  right: 0;
-  bottom: 0;
-  width: var(--rail);
-  z-index: 6;
-  background: #262626;
-  border-left: 1px solid var(--line);
-  cursor: pointer;
-  touch-action: none;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #2a2a2a;
+  border: 1px solid var(--line);
 }
 
 .eval-white {
@@ -238,32 +235,45 @@ main {
   transition: height 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.eval-thumb {
-  position: absolute;
-  left: 3px;
-  right: 3px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--gold) 85%, transparent);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
-}
-
 #eval-label {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0.5rem;
-  display: flex;
-  justify-content: center;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font: 600 0.68rem/1 var(--sans);
+  bottom: 0.3rem;
+  text-align: center;
+  font: 600 0.6rem/1 var(--sans);
   color: #222;
+}
+
+.scrollhint {
+  position: fixed;
+  top: var(--top);
+  right: 3px;
+  bottom: 3px;
+  width: 6px;
+  z-index: 6;
   pointer-events: none;
+  animation: blink 2.4s ease-in-out forwards;
+}
+
+.scrollhint-thumb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: 999px;
+  background: var(--gold);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  15%, 35%, 55%, 75% { opacity: 1; }
+  25%, 45%, 65% { opacity: 0.15; }
 }
 
 .side {
   display: grid;
   gap: 0.75rem;
+  padding-left: 2.35rem;
 }
 
 .status {
@@ -524,26 +534,21 @@ main {
   scrollbar-width: auto;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 720px) {
   :root {
     --board: min(88vw, 58vh, 30rem);
     --game-w: 100%;
-    --rail: 14px;
   }
 
   .layout {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 
   .site {
     width: 100%;
     min-height: 0;
     padding-top: 0;
-  }
-
-  .site:has(.built) {
-    min-height: 0;
   }
 
   .stage {
@@ -554,8 +559,29 @@ main {
     padding: 1.25rem 0;
   }
 
+  .boardrow {
+    grid-template-columns: var(--board);
+    grid-template-rows: 1.1rem var(--board);
+  }
+
+  .eval-white {
+    inset: 0 auto 0 0;
+    height: 100%;
+    width: var(--white);
+    transition-property: width;
+  }
+
+  #eval-label {
+    bottom: auto;
+    top: 0;
+    right: auto;
+    left: 0.5rem;
+    line-height: 1.1rem;
+  }
+
   .side {
     width: var(--board);
+    padding-left: 0;
   }
 
   .status {
@@ -593,10 +619,15 @@ main {
   .eval-white {
     transition: none;
   }
+
+  .scrollhint {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 @media print {
-  .top, .stage, .eval, .skip {
+  .top, .stage, .scrollhint, .skip {
     display: none;
   }
 
