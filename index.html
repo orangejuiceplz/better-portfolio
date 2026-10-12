@@ -7,6 +7,11 @@
   <meta name="description" content="Shiven Kishore is a student from Howell, NJ: founder of NibbleCode, robotics programming lead, and cybersecurity challenge writer. Class of 2027.">
   <meta name="theme-color" content="#15100c">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2315100c'/%3E%3Ctext x='32' y='47' text-anchor='middle' font-size='40' fill='%23e8d5a8'%3E%E2%99%9E%3C/text%3E%3C/svg%3E">
+  <link rel="modulepreload" href="vendor/chessground/chessground.min.js">
+  <link rel="modulepreload" href="vendor/chess.js/chess.js">
+  <link rel="stylesheet" href="vendor/chessground/chessground.base.css">
+  <link rel="stylesheet" href="vendor/chessground/chessground.brown.css">
+  <link rel="stylesheet" href="vendor/chessground/chessground.cburnett.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -24,26 +29,41 @@
   </header>
 
   <main id="top">
-    <section class="hero" aria-labelledby="hero-title">
+    <section id="game" class="hero" aria-labelledby="hero-title">
       <div class="hero-text">
         <p class="eyebrow">White to move</p>
         <h1 id="hero-title">Shiven Kishore</h1>
-        <p class="lede">Student, builder, and founder from Howell, NJ. Teaches kids how computers work through NibbleCode, programs a competition robot, and writes capture-the-flag challenges.</p>
-        <p class="facts">Freehold High School &middot; Class of 2027 &middot; GPA 4.8 weighted</p>
-        <div class="actions">
-          <a class="button" href="#middlegame">See the game</a>
-          <a class="button ghost" href="https://github.com/orangejuiceplz" rel="me noopener">GitHub</a>
+        <p class="lede">This portfolio is a chess game. Each section is locked behind a puzzle. Find the winning move on the board to open it.</p>
+        <p class="facts">Not a chess player? Every lock has a reveal link. Nothing here is hidden for good.</p>
+        <div class="panel" aria-labelledby="puzzle-title">
+          <ol id="progress" aria-label="Puzzle progress">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ol>
+          <h2 id="puzzle-title">Puzzle 1 of 4</h2>
+          <p id="puzzle-goal" class="goal"></p>
+          <p id="puzzle-unlocks" class="meta"></p>
+          <p id="puzzle-status" class="status" role="status" aria-live="polite"></p>
+          <div class="actions">
+            <button id="hint" class="button ghost" type="button">Hint</button>
+            <button id="next" class="button" type="button" hidden>Next puzzle</button>
+            <button id="skip" class="linkish" type="button">Reveal without solving</button>
+          </div>
         </div>
       </div>
-      <div class="board" role="img" aria-label="A chessboard with a knight, a rook, a bishop, and a king">
-        <span class="piece knight" style="--f:2;--r:6">&#9822;</span>
-        <span class="piece rook" style="--f:8;--r:1">&#9820;</span>
-        <span class="piece bishop" style="--f:6;--r:3">&#9821;</span>
-        <span class="piece king" style="--f:4;--r:8">&#9818;</span>
-      </div>
+      <div id="board" class="board" aria-label="Chess puzzle board"></div>
     </section>
 
-    <section id="opening" class="section" aria-labelledby="opening-title">
+    <section id="opening" class="section locked" data-puzzle data-name="Education" aria-labelledby="opening-title">
+      <div class="lock card">
+        <span class="glyph" aria-hidden="true">&#9823;</span>
+        <h2>Education</h2>
+        <p class="meta">Locked. Solve puzzle 1 on the board to reveal it.</p>
+        <p><a class="play" href="#game">Play puzzle 1</a> &middot; <a class="reveal" href="#opening">Reveal without solving</a></p>
+      </div>
+      <div class="content">
       <header class="section-head">
         <p class="eyebrow">1. The opening</p>
         <h2 id="opening-title">Education</h2>
@@ -62,9 +82,17 @@
           <li>U.S. History <b>4</b></li>
         </ul>
       </article>
+      </div>
     </section>
 
-    <section id="middlegame" class="section" aria-labelledby="middlegame-title">
+    <section id="middlegame" class="section locked" data-puzzle data-name="Activities and leadership" aria-labelledby="middlegame-title">
+      <div class="lock card">
+        <span class="glyph" aria-hidden="true">&#9823;</span>
+        <h2>Activities and leadership</h2>
+        <p class="meta">Locked. Solve puzzle 2 on the board to reveal it.</p>
+        <p><a class="play" href="#game">Play puzzle 2</a> &middot; <a class="reveal" href="#middlegame">Reveal without solving</a></p>
+      </div>
+      <div class="content">
       <header class="section-head">
         <p class="eyebrow">2. The middlegame</p>
         <h2 id="middlegame-title">Activities and leadership</h2>
@@ -121,9 +149,17 @@
           </div>
         </li>
       </ol>
+      </div>
     </section>
 
-    <section id="endgame" class="section" aria-labelledby="endgame-title">
+    <section id="endgame" class="section locked" data-puzzle data-name="Awards and service" aria-labelledby="endgame-title">
+      <div class="lock card">
+        <span class="glyph" aria-hidden="true">&#9823;</span>
+        <h2>Awards and service</h2>
+        <p class="meta">Locked. Solve puzzle 3 on the board to reveal it.</p>
+        <p><a class="play" href="#game">Play puzzle 3</a> &middot; <a class="reveal" href="#endgame">Reveal without solving</a></p>
+      </div>
+      <div class="content">
       <header class="section-head">
         <p class="eyebrow">3. The endgame</p>
         <h2 id="endgame-title">Awards and service</h2>
@@ -157,9 +193,17 @@
           </ul>
         </article>
       </div>
+      </div>
     </section>
 
-    <section id="repertoire" class="section" aria-labelledby="repertoire-title">
+    <section id="repertoire" class="section locked" data-puzzle data-name="Skills and certifications" aria-labelledby="repertoire-title">
+      <div class="lock card">
+        <span class="glyph" aria-hidden="true">&#9823;</span>
+        <h2>Skills and certifications</h2>
+        <p class="meta">Locked. Solve puzzle 4 on the board to reveal it.</p>
+        <p><a class="play" href="#game">Play puzzle 4</a> &middot; <a class="reveal" href="#repertoire">Reveal without solving</a></p>
+      </div>
+      <div class="content">
       <header class="section-head">
         <p class="eyebrow">4. The repertoire</p>
         <h2 id="repertoire-title">Skills and certifications</h2>
@@ -188,9 +232,17 @@
           </ul>
         </article>
       </div>
+      </div>
     </section>
 
-    <section id="contact" class="section" aria-labelledby="contact-title">
+    <section id="contact" class="section locked" data-finale aria-labelledby="contact-title">
+      <div class="lock card">
+        <span class="glyph" aria-hidden="true">&#9818;</span>
+        <h2>Checkmate</h2>
+        <p class="meta">Solve all four puzzles to open the last section.</p>
+        <p><a class="reveal" href="#contact">Reveal without solving</a></p>
+      </div>
+      <div class="content">
       <header class="section-head">
         <p class="eyebrow">Your move</p>
         <h2 id="contact-title">Contact</h2>
@@ -202,13 +254,14 @@
         <li><a href="https://github.com/orangejuiceplz" rel="me noopener">github.com/orangejuiceplz</a></li>
         <li>Howell, NJ</li>
       </ul>
+      </div>
     </section>
   </main>
 
   <footer class="foot">
-    <p>Shiven Kishore &middot; Built by hand with plain HTML and CSS.</p>
+    <p>Shiven Kishore &middot; Board by <a href="https://github.com/lichess-org/chessground" rel="noopener">chessground</a>, the lichess board. Rules by <a href="https://github.com/jhlywa/chess.js" rel="noopener">chess.js</a>. <a id="reset" href="#game">Start over</a></p>
   </footer>
 
-  <script src="script.js" defer></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

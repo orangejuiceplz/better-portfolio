@@ -18,6 +18,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 4.5rem;
@@ -187,54 +191,90 @@ main {
 }
 
 .board {
-  --sq: 12.5%;
-  position: relative;
+  width: min(100%, 30rem);
   aspect-ratio: 1;
-  width: min(100%, 26rem);
   justify-self: center;
-  border: 10px solid var(--bg-raised);
-  border-radius: 10px;
+  border-radius: 6px;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
-  background:
-    repeating-conic-gradient(var(--light-sq) 0 25%, var(--dark-sq) 0 50%)
-    0 0 / 25% 25%;
 }
 
-.piece {
-  position: absolute;
-  width: var(--sq);
-  height: var(--sq);
-  left: calc((var(--f) - 1) * var(--sq));
-  top: calc((8 - var(--r)) * var(--sq));
-  display: grid;
-  place-items: center;
-  font: 2.4rem/1 var(--pieces);
-  color: #1a120c;
-  text-shadow: 0 2px 2px rgba(255, 255, 255, 0.25);
+.panel {
+  margin-top: 1.75rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 
-.knight {
-  animation: tour 9s ease-in-out infinite;
+.panel h2 {
+  font-size: 1.4rem;
 }
 
-@keyframes tour {
-  0%, 18% { --f: 2; --r: 6; }
-  25%, 43% { --f: 4; --r: 7; }
-  50%, 68% { --f: 6; --r: 6; }
-  75%, 93% { --f: 7; --r: 4; }
-  100% { --f: 2; --r: 6; }
+.panel .actions {
+  margin-top: 1rem;
+  align-items: center;
 }
 
-@property --f {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 1;
+#progress {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
 }
 
-@property --r {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 1;
+#progress li {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 3px;
+  background: var(--dark-sq);
+  border: 2px solid transparent;
+}
+
+#progress li.active {
+  border-color: var(--ink);
+}
+
+#progress li.done {
+  background: var(--gold);
+}
+
+.goal {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+}
+
+.status {
+  min-height: 1.6em;
+  color: var(--gold);
+}
+
+.linkish {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.lock.card {
+  position: relative;
+  padding-top: 3.4rem;
+}
+
+.lock h2 {
+  font-size: 1.5rem;
+}
+
+.locked .content,
+.section:not(.locked) .lock {
+  display: none;
 }
 
 .section {
@@ -412,15 +452,15 @@ main {
   html {
     scroll-behavior: auto;
   }
-
-  .knight {
-    animation: none;
-  }
 }
 
 @media print {
-  .top, .board, .actions, .foot, .skip {
+  .top, .board, .panel, .actions, .foot, .skip, .lock {
     display: none;
+  }
+
+  .locked .content {
+    display: block;
   }
 
   body {
